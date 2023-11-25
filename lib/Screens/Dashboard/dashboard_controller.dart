@@ -10,7 +10,7 @@ class DashboardController extends AppBaseController {
 
 
 List <Widget>  pages = [
-const HomeScreen(),
+ HomeScreen(),
 const MyBookingsScreen(isFrom: false),
    ProfileScreen(),
    ProfileScreen()

@@ -3,6 +3,12 @@ import 'apiConstants.dart';
 final Uri getUserRegister = Uri.parse('${baseUrl}Apicontroller/signUp');
 final Uri verifyOTPAPI = Uri.parse('${baseUrl}Apicontroller/otpVerify');
 final Uri sendOTPAPI= Uri.parse('${baseUrl}Apicontroller/otpLogin');
+final Uri getCatAPI= Uri.parse('${baseUrl}Apicontroller/category_list');
+final Uri getCounterAPI= Uri.parse('${baseUrl}Apicontroller/counters');
+
+
+
+
 final Uri getSliderAPI = Uri.parse('${baseUrl}api-get-slider-images');
 final Uri getPrivacyAPI = Uri.parse('${baseUrl}Apicontroller/apiGetContent');
 final Uri getContactAPI = Uri.parse('${baseUrl}Apicontroller/apiGetContactDetails');

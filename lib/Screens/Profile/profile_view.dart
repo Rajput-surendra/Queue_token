@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:booknplay/Constants.dart';
 import 'package:booknplay/Routes/routes.dart';
+import 'package:booknplay/Screens/Auth_Views/Login/login_view.dart';
 import 'package:booknplay/Screens/Profile/profile_controller.dart';
 import 'package:booknplay/Screens/Withdrawal/withdrawal_view.dart';
 import 'package:booknplay/Utils/Colors.dart';
@@ -635,12 +636,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: const Text("Cancel"),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        setState(() async {
-                                          SharedPre setValue = await SharedPre();
-                                          await SharedPre.clear('userId');
-                                          await Future.delayed(const Duration(seconds: 2));
-                                          Get.toNamed(loginScreen);
+                                      onPressed: () async{
+                                        await SharedPre.clear('userId');
+                                        await Future.delayed(const Duration(seconds: 1));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                                        setState(()  {
+
+                                          //Get.toNamed(loginScreen);
                                         });
                                       },
                                       child: const Text("Logout"),

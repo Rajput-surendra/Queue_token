@@ -3,27 +3,38 @@ import 'package:booknplay/Services/api_services/apiStrings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../Models/HomeModel/signUp_cat_model.dart';
 import '../../../Routes/routes.dart';
 
 class SignupController extends AppBaseController {
   RxBool isLoading = false.obs ;
+
+  @override
+  Future<void> onInit() async {
+    // TODO: implement onInit
+    super.onInit();
+    // TODO: implement initState
+    getCateApi();
+  }
   Future<void> registerUser(
       {
       required String mobile,
-      required String? referral,
-      required String? name}) async {
+      required String? name,
+      required String? address,
+      required String? city,
+      required bool? selected,
+      }) async {
     isLoading.value = true ;
-
     var param = {
       'userName': name,
       'mobile': mobile,
-      'referralCode':referral,
-
+      'role': selected ==  false ? 'user' :'counter',
+      'address':address,
+      'city':city
     };
     apiBaseHelper.postAPICall(getUserRegister, param).then((getData) {
       bool status = getData['status'];
       String msg = getData['msg'];
-       print('____param______${getUserRegister}______${param}___');
       if (status) {
         Get.toNamed(otpScreen, arguments: [mobile, getData['otp']]);
         Fluttertoast.showToast(msg: msg);
@@ -34,6 +45,17 @@ class SignupController extends AppBaseController {
 
       }
       isLoading.value = false ;
+    });
+  }
+
+  GetCatModel? getCatModel;
+  Future<void> getCateApi() async {
+    apiBaseHelper.postAPICall2(getCatAPI).then((getData) {
+      print('_____getData_____${getData}_________');
+      getCatModel = GetCatModel.fromJson(getData);
+    update();
+
+      //isLoading.value = false;
     });
   }
 }

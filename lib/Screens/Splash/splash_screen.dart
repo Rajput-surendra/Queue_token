@@ -27,15 +27,8 @@ class SplashScreen extends StatelessWidget {
         init: SplashController(),
         builder: (controller) {
           return Container(
-
             height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.activeBorder, Colors.transparent, Colors.transparent, AppColors.secondary],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0, 0, 0.6, 1],
-              ),
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/splashback.png"),
                 fit: BoxFit.fill,
@@ -50,48 +43,26 @@ class SplashScreen extends StatelessWidget {
               pageTransitionType: PageTransitionType.scale,
               animationDuration: Duration(seconds: 2),
               splashIconSize: 250,
-               backgroundColor: AppColors.secondary,
+              backgroundColor: AppColors.secondary,
 
-              // pageTransitionType: PageTransitionType.scale,
             ),
           );
 
 
-            /*Animate(
-          effects: [FadeEffect(), ScaleEffect()],
-          child: Text("Hello World!"),
-        );*/
-            // AnimatedSplashScreen(
-            //     duration: 3000,
-            //     splash: 'assets/images/SPLASH LOGO.png',
-            //     nextScreen: checkLogin(),
-            //     splashTransition: SplashTransition.fadeTransition,
-            //     pageTransitionType: PageTransitionType.scale,
-            //     );
-            AnimatedSplashScreen.withScreenFunction(
-              splash: 'assets/images/SPLASH LOGO.png',
-              screenFunction: () async {
-                return checkLogin();
-              },
-              //splashTransition: SplashTransition.rotationTransition,
-              pageTransitionType: PageTransitionType.leftToRight,
-
-              animationDuration: Duration(seconds: 30),
-
-              // pageTransitionType: PageTransitionType.scale,
-            );
         });
   }
 
-   checkLogin() async {
-    Timer(const Duration(seconds: 3), () async {
+  checkLogin() async {
+    final isLogin2 = await SharedPre.getStringValue('userId');
+    Future.delayed(const Duration(seconds: 1), () async {
       final isLogin = await SharedPre.getStringValue('userId');
-
       if (isLogin != null && isLogin != '') {
         Get.offAllNamed(bottomBar);
       } else {
         Get.offAllNamed(loginScreen);
       }
     });
+
   }
+
 }

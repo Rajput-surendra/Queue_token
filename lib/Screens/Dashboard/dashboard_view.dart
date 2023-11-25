@@ -14,10 +14,9 @@ import '../Bookings/my_booking_view.dart';
 import '../Home/home_view.dart';
 import '../Profile/profile_view.dart';
 import '../Result/result_view.dart';
-
 class DashBoardScreen extends StatefulWidget {
-  DashBoardScreen({Key? key}) : super(key: key);
-
+  DashBoardScreen({Key? key,this.nameC,this.cityC,this.catId,this.counterId}) : super(key: key);
+  String? nameC,cityC,catId,counterId;
   @override
   State<DashBoardScreen> createState() => _DashBoardScreenState();
 }
@@ -35,9 +34,18 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     MyBookingsScreen(isFrom: false),
     ProfileScreen()
   ];
+@override
+  void initState() {
+    // TODO: implement initState
 
+  // nameC=widget.nameC;
+  // cityC=widget.cityC;
+  // catIdC=widget.catId;
+  // counterIdC=widget.counterId;
+  }
   @override
   Widget build(BuildContext context) {
+    print('_____nameC_____${widget.nameC}_________');
     return WillPopScope(
       onWillPop: () async {
         // Display a confirmation dialog when the back button is pressed.

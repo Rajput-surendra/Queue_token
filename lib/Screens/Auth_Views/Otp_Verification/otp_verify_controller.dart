@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:booknplay/Controllers/app_base_controller/app_base_controller.dart';
 import 'package:booknplay/Local_Storage/shared_pre.dart';
 import 'package:booknplay/Services/api_services/apiStrings.dart';
@@ -45,7 +44,8 @@ RxBool isLoading = false.obs ;
         SharedPre.setValue('userId', getData['user_id'].toString());
 
         Fluttertoast.showToast(msg: msg);
-        Get.toNamed(bottomBar);
+        Get.toNamed(search);
+
 
       } else {
 

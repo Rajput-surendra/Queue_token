@@ -83,23 +83,23 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                       padding: const EdgeInsets.all(3.0),
                       child: Container(
                         //height: MediaQuery.of(context).size.height/1.1,
-                        child: ListView.builder(
+                        child: lotteryModel == null ? Center(child: CircularProgressIndicator()):ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount:lotteryModel?.data?.lotteries?.length ,
+                            itemCount:lotteryModel!.data!.lotteries!.length ,
                             // itemCount:2,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                onTap: (){
-                                  if( lotteryModel?.data?.lotteries?[index].active == '0' ){
-                                    Fluttertoast.showToast(msg: "Booking not yet to be start");
-                                  }else{
-                                    //   Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerScreen(gId:lotteryModel?.data?.lotteries?[index].gameId )));
-                                  }
-
-                                  //Get.toNamed(winnerScreen,arguments:lotteryModel?.data?.lotteries?[index].gameId );
-                                },
+                                // onTap: (){
+                                //   if( lotteryModel!.data!.lotteries?[index].active == '0' ){
+                                //     Fluttertoast.showToast(msg: "Booking not yet to be start");
+                                //   }else{
+                                //     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerScreen(gId:lotteryModel?.data?.lotteries?[index].gameId )));
+                                //   }
+                                //
+                                //   //Get.toNamed(winnerScreen,arguments:lotteryModel?.data?.lotteries?[index].gameId );
+                                // },
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Container(
@@ -120,7 +120,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                                     SizedBox(height: 25,),
                                                     Text("Open:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                                     SizedBox(width: 2,),
-                                                    Text("${lotteryModel?.data?.lotteries?[index].openTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                    Text("${lotteryModel!.data!.lotteries![index].openTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
                                                   ],
                                                 ),
                                                 Row(
@@ -128,7 +128,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                                     SizedBox(height: 25,),
                                                     Text("Close:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                                     SizedBox(width: 2,),
-                                                    Text("${lotteryModel?.data?.lotteries?[index].closeTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                    Text("${lotteryModel!.data!.lotteries![index].closeTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
                                                   ],
                                                 )
                                               ],
@@ -172,7 +172,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                                   children: [
                                                     Text("Date :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                     SizedBox(width: 2,),
-                                                    Text("${lotteryModel?.data?.lotteries?[index].resultDate}",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
+                                                    Text("${lotteryModel!.data!.lotteries![index].resultDate}",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
                                                   ],
                                                 ),
                                               ],

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:booknplay/Routes/routes.dart';
+import 'package:booknplay/Screens/Dashboard/dashboard_view.dart';
 import 'package:booknplay/Screens/Home/HomeController.dart';
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:booknplay/Widgets/commen_widgets.dart';
@@ -7,18 +10,23 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../Models/HomeModel/get_result_model.dart';
 import '../../Models/HomeModel/get_slider_model.dart';
 import '../../Models/HomeModel/lottery_model.dart';
+import '../../Models/get_counter_model.dart';
 import '../../Services/api_services/apiConstants.dart';
 import '../../Services/api_services/apiStrings.dart';
+import '../Counter/counter_view.dart';
 import '../Notification/notification_view.dart';
+import '../Search/search_view.dart';
 import '../Winner/winner_view.dart';
+import 'package:http/http.dart'as http;
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+   HomeScreen({Key? key,this.nameC,this.cityC,this.catId,this.counterId}) : super(key: key);
+  String? nameC,cityC,catId,counterId;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -30,12 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     getSlider();
-    getLottery();
-    getResult();
+    getFilterApi();
+    print('____userName______${userName}_________');
+
   }
+
   final CarouselController carouselController = CarouselController();
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.whit,
@@ -77,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: () {
             return Future.delayed(Duration(seconds: 2),(){
               getSlider();
-              getLottery();
-              getResult();
+              getFilterApi();
+
             });
           },
           child: ListView.builder(
@@ -158,7 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             const Text(
                               "Today's Token",
                               style: TextStyle(
@@ -176,27 +186,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Container(
                                 height: 110,
-                                child: ListView.builder(
+                                child:getCounterModel == null ?Center(child: CircularProgressIndicator()): ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    // shrinkWrap: true,
-                                    // physics: const NeverScrollableScrollPhysics(),
-                                    itemCount:lotteryModel?.data?.lotteries?.length ,
-                                    // itemCount:2,
+                                    itemCount:getCounterModel!.todaysTokens![0].todayTokens!.length ,
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                         onTap: (){
-                                          if( lotteryModel?.data?.lotteries?[index].active == '0' ){
-                                            //Fluttertoast.showToast(msg: "Booking not yet to be start");
-                                          }else{
-                                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerScreen(gId:lotteryModel?.data?.lotteries?[index].gameId )));
-                                          }
-
-                                          //Get.toNamed(winnerScreen,arguments:lotteryModel?.data?.lotteries?[index].gameId );
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CounterScreen(cId:
+                                          getCounterModel!.todaysTokens![0].todayTokens![index].counterId,
+                                            tokenId: getCounterModel!.todaysTokens![0].todayTokens![index].id,
+                                            date:getCounterModel!.todaysTokens![0].todayTokens![index].date ,
+                                            fTime: getCounterModel!.todaysTokens![0].todayTokens![index].fromTime,
+                                            toTime: getCounterModel!.todaysTokens![0].todayTokens![index].toTime,
+                                          tTotal: getCounterModel!.todaysTokens![0].todayTokens![index].totalToken,)));
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Container(
                                               height: 100,
+                                              width: 280,
                                               decoration: const BoxDecoration(
                                                   image: DecorationImage(
                                                       image: AssetImage("assets/images/lotteryback.png"), fit: BoxFit.fill)),
@@ -204,33 +212,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 children: [
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [ SizedBox(height: 15,),
-                                                      Row(
-                                                        children: [
-
-                                                          Text("Open:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                          SizedBox(width: 2,),
-                                                          Text("${lotteryModel?.data?.lotteries?[index].openTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
-                                                        ],
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(left: 10,top: 6),
+                                                        child: Row(
+                                                          children: [
+                                                            Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                            SizedBox(width: 2,),
+                                                            Row(
+                                                              children: [
+                                                                Text("${getCounterModel!.todaysTokens![0].todayTokens![index].fromTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                                Text(" to ${getCounterModel!.todaysTokens![0].todayTokens![index].toTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
-                                                      SizedBox(width: 30,),
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(height: 25,),
-                                                          Text("Close:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                          SizedBox(width: 2,),
-                                                          Text("${lotteryModel?.data?.lotteries?[index].closeTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
-                                                        ],
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(right: 8,top: 6),
+                                                        child: Row(
+                                                          children: [
+
+                                                            Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                            SizedBox(width: 2,),
+                                                            Text("${getCounterModel!.todaysTokens![0].todayTokens![index].date!}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                          ],
+                                                        ),
                                                       )
                                                     ],
                                                   ),
 
                                                   Padding(
-                                                    padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
+                                                    padding: const EdgeInsets.only(left: 5,right: 10,top: 10),
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        const Padding(
+                                                         Padding(
                                                           padding: EdgeInsets.all(8.0),
                                                           child: Row(
                                                             children: [
@@ -240,9 +257,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 children: [
                                                                   Row(
                                                                     children: [
-                                                                      Text("Dr.Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                       SizedBox(width: 2,),
-                                                                      Text("Rahul ",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      Text("${getCounterModel!.todaysTokens![0].compnyName}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                    ],
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      SizedBox(height: 10,),
+                                                                      Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      SizedBox(width: 2,),
+                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].userName!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                     ],
                                                                   ),
                                                                   Row(
@@ -250,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       SizedBox(height: 10,),
                                                                       Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                       SizedBox(width: 2,),
-                                                                      Text("11",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
+                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].availableToken!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                     ],
                                                                   )
                                                                 ],
@@ -258,11 +283,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        Row(
+                                                         Row(
                                                           children: [
-                                                            Text("Date :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                            SizedBox(width: 2,),
-                                                            Text("${lotteryModel?.data?.lotteries?[index].resultDate}",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
+                                                           Column(
+                                                             crossAxisAlignment: CrossAxisAlignment.end,
+                                                             children: [
+                                                               Row(
+                                                                 children: [
+                                                                   Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                   SizedBox(width: 2,),
+                                                                   Text("${getCounterModel!.todaysTokens![0].todayTokens![index].totalToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                 ],
+                                                               ),
+                                                             Row(
+                                                               children: [
+                                                                 Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                 SizedBox(width: 2,),
+                                                                 Text("${getCounterModel!.todaysTokens![0].todayTokens![index].currentToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                               ],
+                                                             ),
+                                                               SizedBox(height: 2,),
+                                                               Row(
+                                                                 children: [
+                                                                   Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                   SizedBox(width: 2,),
+                                                                   Text("${getCounterModel!.todaysTokens![0].todayTokens![index].nextToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                 ],
+                                                               ),
+
+                                                             ],
+                                                           )
                                                           ],
                                                         ),
                                                       ],
@@ -298,90 +348,99 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(height: 10,),
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
+                          InkWell(
+                            onTap: (){
+                              // Get.toNamed(winnerScreen);
+                            },
                             child: Container(
-                              //height: MediaQuery.of(context).size.height/1.1,
-                              child: ListView.builder(
+                              child:getCounterModel == null ?Center(child: CircularProgressIndicator()): ListView.builder(
+                                  itemCount:getCounterModel!.upcomingTokens![0].nextDayTokens!.length ,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount:lotteryModel?.data?.lotteries?.length ,
-                                  // itemCount:2,
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: (){
-                                        if( lotteryModel?.data?.lotteries?[index].active == '0' ){
-                                          Fluttertoast.showToast(msg: "Booking not yet to be start");
-                                        }else{
-                                       //   Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerScreen(gId:lotteryModel?.data?.lotteries?[index].gameId )));
-                                        }
-
                                         //Get.toNamed(winnerScreen,arguments:lotteryModel?.data?.lotteries?[index].gameId );
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
                                         child: Container(
-                                            height: 115,
+                                            height: 100,
+                                            width: 280,
                                             decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage("assets/images/lotteryback.png"), fit: BoxFit.fill)),
-                                            child:  Column(
+                                            child: Column(
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 10,right: 10,top: 5),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-
-                                                      Row(
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10,top: 6),
+                                                      child: Row(
                                                         children: [
-                                                          SizedBox(height: 25,),
-                                                          Text("Open:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                          Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                                           SizedBox(width: 2,),
-                                                          Text("${lotteryModel?.data?.lotteries?[index].openTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                          Row(
+                                                            children: [
+                                                              Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].fromTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                              Text(" to ${getCounterModel!.upcomingTokens![0].nextDayTokens![index].toTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                            ],
+                                                          )
                                                         ],
                                                       ),
-                                                      Row(
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(right: 8,top: 6),
+                                                      child: Row(
                                                         children: [
-                                                          SizedBox(height: 25,),
-                                                          Text("Close:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+
+                                                          Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                                           SizedBox(width: 2,),
-                                                          Text("${lotteryModel?.data?.lotteries?[index].closeTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                          Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].date!}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
                                                         ],
-                                                      )
-                                                    ],
-                                                  ),
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
 
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 10,right: 10,top: 15),
+                                                  padding: const EdgeInsets.only(left: 5,right: 10,top: 10),
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.all(8.0),
+                                                        padding: EdgeInsets.all(8.0),
                                                         child: Row(
                                                           children: [
-                                                            SizedBox(height: 35,),
+                                                            SizedBox(height: 2,),
                                                             Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Text("Dr.Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     SizedBox(width: 2,),
-                                                                    Text("Surendra",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    Text("${getCounterModel!.upcomingTokens![0].compnyName}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                   ],
                                                                 ),
-                                                               Row(
-                                                                 children: [
-                                                                   SizedBox(height: 10,),
-                                                                   Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                   SizedBox(width: 2,),
-                                                                   Text("16",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
-                                                                 ],
-                                                               )
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(height: 10,),
+                                                                    Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].userName!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(height: 10,),
+                                                                    Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].availableToken!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                  ],
+                                                                )
                                                               ],
                                                             )
                                                           ],
@@ -389,9 +448,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Text("Date :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                          SizedBox(width: 2,),
-                                                          Text("${lotteryModel?.data?.lotteries?[index].resultDate}",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
+                                                          Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                                            children: [
+                                                              Row(
+                                                                children: [
+                                                                  Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                  SizedBox(width: 2,),
+                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].totalToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                  SizedBox(width: 2,),
+                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].currentToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                ],
+                                                              ),
+                                                              SizedBox(height: 2,),
+                                                              Row(
+                                                                children: [
+                                                                  Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                  SizedBox(width: 2,),
+                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].nextToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                ],
+                                                              ),
+
+                                                            ],
+                                                          )
                                                         ],
                                                       ),
                                                     ],
@@ -414,6 +498,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 20,)
                   ],
                 )
+
               ],
             );
           }),
@@ -474,7 +559,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getSlider() async {
     // isLoading.value = true;
     var param = {
-      'app_key':""
+      'app_key': ""
     };
     apiBaseHelper.postAPICall(getSliderAPI, param).then((getData) {
       bool status = getData['status'];
@@ -489,26 +574,33 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  LotteryModel? lotteryModel;
-  Future<void> getLottery() async {
-    apiBaseHelper.postAPICall2(getLotteryAPI).then((getData) {
-      setState(() {
-        lotteryModel = LotteryModel.fromJson(getData);
-      });
-
-      //isLoading.value = false;
+  GetCounterModel? getCounterModel;
+  getFilterApi() async {
+    var headers = {
+      'Cookie': 'ci_session=052f7198d39c07d7c57fb2fed6a242b3b8aaa2de'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/counters'));
+    request.fields.addAll({
+      userName!.isEmpty ? "" : 'counter_name': userName.toString(),
+      cityName!.isEmpty ? "" : 'counter_city': cityName.toString(),
+      catNewId == null ? "" : 'counter_category': catNewId.toString(),
+      cId!.isEmpty ? "" : 'counter_id': cId.toString(),
     });
-  }
-
-  GetResultModel? getResultModel;
-  Future<void> getResult() async {
-    apiBaseHelper.postAPICall2(getResultAPI).then((getData) {
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var result =  await response.stream.bytesToString();
+      var finalResult  = GetCounterModel.fromJson(jsonDecode(result));
       setState(() {
-        getResultModel = GetResultModel.fromJson(getData);
+        getCounterModel =  finalResult;
       });
+      Fluttertoast.showToast(msg: "${finalResult.message}");
 
-      //isLoading.value = false;
-    });
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+
   }
 
 

@@ -33,7 +33,7 @@ class _Otp extends State<OTPVerificationScreen> {
             physics: const NeverScrollableScrollPhysics(),
             child: Container(
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/punbabComman.png"),
                   fit: BoxFit.cover,
@@ -43,11 +43,11 @@ class _Otp extends State<OTPVerificationScreen> {
                 padding: const EdgeInsets.only(right:20,left: 20,top: 90),
                 child: Column(
                   children: [
-                    Text("Verification",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold,fontSize: 25),),
-                    SizedBox(height: 50,),
+                    const Text("Verification",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold,fontSize: 25),),
+                    const SizedBox(height: 50,),
                     Image.asset("assets/images/verification.png",height: 150,width: 200,),
                     const SizedBox(height: 30,),
-                    Text('Code has been sent to',style: TextStyle(color: AppColors.whit),),
+                    const Text('Code has been sent to',style: TextStyle(color: AppColors.whit),),
                     Text(controller.data[0].toString(),style: const TextStyle(fontSize: 20,color: AppColors.whit),),
                     Text('OTP: ${controller.data[1]}',style: const TextStyle(fontSize: 20,color: AppColors.whit),),
 
@@ -60,7 +60,7 @@ class _Otp extends State<OTPVerificationScreen> {
                       onChanged: (value) {
                         controller.otp = value.toString() ;
                       },
-                      textStyle: TextStyle(color: AppColors.whit),
+                      textStyle: const TextStyle(color: AppColors.whit),
                       pinTheme: PinTheme(
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(10),
@@ -98,7 +98,7 @@ class _Otp extends State<OTPVerificationScreen> {
                     //   }, // end onSubmit
                     // ),
                     const SizedBox(height: 30,),
-                    Text("Haven't received the verification code?",style: TextStyle(color: AppColors.whit,fontSize: 16),),
+                    const Text("Haven't received the verification code?",style: TextStyle(color: AppColors.whit,fontSize: 16),),
                     InkWell(onTap: (){
                      // controller.sendOtp();
                     },

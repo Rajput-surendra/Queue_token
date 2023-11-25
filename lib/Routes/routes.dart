@@ -27,3 +27,4 @@ const String video = '/VIDEO';
 const String contact = '/CONTACT';
 const String notice = '/NOTICE';
 const String enquiry = '/ENQUIRY';
+const String search = '/SEARCH';

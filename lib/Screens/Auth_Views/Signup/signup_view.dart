@@ -6,10 +6,16 @@ import 'package:booknplay/Utils/extentions.dart';
 import 'package:booknplay/Widgets/app_button.dart';
 import 'package:booknplay/Widgets/auth_custom_design.dart';
 import 'package:booknplay/Widgets/commen_widgets.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+
+import '../../../Models/HomeModel/signUp_cat_model.dart';
+import '../../../Services/api_services/apiConstants.dart';
+import '../../../Services/api_services/apiStrings.dart';
+import '../../../Widgets/button.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -21,10 +27,14 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final nameController = TextEditingController();
   final mobileController = TextEditingController();
-  final referralController = TextEditingController();
+  final addressController = TextEditingController();
+  final cityController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
+  String selectedOption = "Get Token";
+  String? catId;
+  SignUpCat? animalCat;
+ bool? isUser = true;
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -32,91 +42,376 @@ class _SignupScreenState extends State<SignupScreen> {
         builder: (controller) {
           return Scaffold(
             body: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child:  Container(
-                height: MediaQuery.of(context).size.height,
+             // physics: const NeverScrollableScrollPhysics(),
+              child: Container(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/punbabComman.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
-                child:  Padding(
+                child: Padding(
                   padding: const EdgeInsets.only(
-                      right: 20, left: 20, top: 30),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 80,),
-                        const Text("Sign Up",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold,fontSize: 25),),
-                        const SizedBox(height: 40,),
-                        Image.asset("assets/images/SIGN UP.png",height: 150,width: 200,),
-                        const SizedBox(height: 30,),
-                        textField(
-                            title: 'User Name',
-                            prefixIcon: Icons.person,
-                            controller: nameController),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        textField(
-                            title: 'Mobile Number',
-                            prefixIcon: Icons.phone,
-                            inputType: TextInputType.phone,
-                            maxLength: 10,
-                            controller: mobileController),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        // textField1(
-                        //     title: 'Referral Code (Optional)',
-                        //     prefixIcon: Icons.person,
-                        //     controller: referralController),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        Obx(
-                              () => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 25),
-                              child: controller.isLoading.value
-                                  ? const Center(
-                                child:
-                                CircularProgressIndicator(),
-                              ): AppButton(
-                                title: 'Sign Up',
-                                onTap: () {
-                                  if(mobileController.text.isEmpty && nameController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "All Fields Required");
-                                  } else if(mobileController.text.isEmpty || mobileController.text.length <10 ){
-                                    Fluttertoast.showToast(msg: "Please Enter 10 digit number ");
-                                  }
+                      right: 10, left: 10, top: 30),
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 20,),
+                          const Text("Sign Up", style: TextStyle(color: AppColors
+                              .whit, fontWeight: FontWeight.bold, fontSize: 25),),
+                          const SizedBox(height: 40,),
+                          Image.asset("assets/images/SIGN UP.png", height: 150,
+                            width: 200,),
+                          const SizedBox(height: 30,),
+                             Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        Radio(
+                                          value: 'Get Token',
+                                          groupValue: selectedOption,
+                                          activeColor: AppColors.primary,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedOption = value.toString();
+                                            });
+                                          },
+                                        ),
+                                        const Text('Get Token',style: TextStyle(color: AppColors.whit),),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Row(
+                                      children: [
+                                        Radio(
+                                          value: 'Get Counter',
+                                          groupValue: selectedOption,
+                                          activeColor: AppColors.primary,
+                                          focusColor: AppColors.activeBorder,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedOption = value.toString();
+                                            });
+                                          },
+                                        ),
+                                        const Text('Get Counter',style: TextStyle(color: AppColors.whit),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20.0),
+                                if (selectedOption == 'Get Counter')
+                                Column(
+                                  children: [
+                                    Container(
+                                 width: double.maxFinite,
+                                 height: 50,
+                                     padding: const EdgeInsets.all(5.0),
+                                       decoration: CustomBoxDecoration.myCustomDecoration(),
+                                     child: TextFormField(
+                                       controller: nameController,
+                                       decoration: const InputDecoration(
+                                           hintText: "Enter Name",
+                                           contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                         border: InputBorder.none
+                                       ),
+                                       style: const TextStyle(fontSize: 14),
+                                       validator: (val) {
+                                         if (val!.isEmpty) {
+                                           return "Name cannot be empty";
+                                         } else if (val.length < 5) {
+                                           return "Please enter must 5 digit";
+                                         }
+                                       },
+                                              ),
+                                            ),
+                                     const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      width: double.maxFinite,
+                                      height: 50,
+                                      padding: const EdgeInsets.all(5.0),
+                                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                                      child: TextFormField(
+                                        maxLength: 10,
+                                        keyboardType: TextInputType.number,
+                                        controller: mobileController,
+                                        decoration: const InputDecoration(
+                                          counterText: "",
+                                          hintText: "Mobile Number",
+                                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                         // prefixIcon: Icon(Icons.call),
+                                            border: InputBorder.none
+                                        ),
+                                        style: const TextStyle(fontSize: 14),
+                                        validator: (val) {
+                                          if (val!.isEmpty) {
+                                            return "Mobile cannot be empty";
+                                          } else if (val.length < 10) {
+                                            return "Please enter mobile must 10 digit";
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      width: double.maxFinite,
+                                      height: 50,
+                                      padding: const EdgeInsets.all(5.0),
+                                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                                      child: TextFormField(
+                                        controller: cityController,
+                                        decoration: const InputDecoration(
+                                            hintText: "City Name",
+                                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                            border: InputBorder.none
+                                        ),
+                                        style: const TextStyle(fontSize: 14),
+                                        validator: (val) {
+                                          if (val!.isEmpty) {
+                                            return "City cannot be empty";
+                                          } else if (val.length < 5) {
+                                            return "Please enter must 5 digit";
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      width: double.maxFinite,
+                                      height: 50,
+                                      padding: const EdgeInsets.all(5.0),
+                                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                                      child: TextFormField(
+                                        controller: addressController,
+                                        decoration: const InputDecoration(
+                                            hintText: "Address Name",
+                                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                            border: InputBorder.none
+                                        ),
+                                        style: const TextStyle(fontSize: 14),
+                                        validator: (val) {
+                                          if (val!.isEmpty) {
+                                            return "Address cannot be empty";
+                                          } else if (val.length < 5) {
+                                            return "Please enter must 5 digit";
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    // Container(
+                                    //   width: double.infinity,
+                                    //   child: Card(
+                                    //
+                                    //     elevation: 2,
+                                    //     child: Padding(
+                                    //       padding: const EdgeInsets.all(2.0),
+                                    //       child: DropdownButtonHideUnderline(
+                                    //         child: DropdownButton2<SignUpCat>(
+                                    //           hint:  const Text("Select Category",
+                                    //             style: TextStyle(
+                                    //                 color: AppColors.fntClr,fontWeight: FontWeight.w500,fontSize:15
+                                    //             ),),
+                                    //           value: animalCat,
+                                    //           icon:  Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.secondary,size: 30,),
+                                    //           style:  const TextStyle(color: AppColors.secondary,fontWeight: FontWeight.bold),
+                                    //           underline: Padding(
+                                    //             padding: const EdgeInsets.only(left: 0,right: 0),
+                                    //             child: Container(
+                                    //
+                                    //               // height: 2,
+                                    //               color:  AppColors.whit,
+                                    //             ),
+                                    //           ),
+                                    //           onChanged: (SignUpCat? value) {
+                                    //             setState(() {
+                                    //               animalCat = value!;
+                                    //               catId =  animalCat?.id;
+                                    //               // animalCountApi(animalCat!.id);
+                                    //             });
+                                    //           },
+                                    //           items: controller.getCatModel?.data?.map((items) {
+                                    //             return DropdownMenuItem(
+                                    //               value: items,
+                                    //               child:  Column(
+                                    //                 crossAxisAlignment: CrossAxisAlignment.start,
+                                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                                    //                 children: [
+                                    //                   Padding(
+                                    //                     padding: const EdgeInsets.only(top: 2),
+                                    //                     child: Container(
+                                    //
+                                    //                         child: Padding(
+                                    //                           padding: const EdgeInsets.only(top: 0),
+                                    //                           child: Text(items.name.toString(),overflow:TextOverflow.ellipsis,style: const TextStyle(color: AppColors.fntClr),),
+                                    //                         )),
+                                    //                   ),
+                                    //
+                                    //                 ],
+                                    //               ),
+                                    //             );
+                                    //           })
+                                    //               .toList(),
+                                    //         ),
+                                    //
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                )
 
-                                  else {
-                                    controller.registerUser(
-                                        mobile: mobileController.text,
-                                        name: nameController.text,
-                                        referral: referralController.text);
-
-                                  }
-                                },
-                              )),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Already have an account?",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
+                              ],
                             ),
-                            TextButton(
+                          ),
+
+                          if (selectedOption == 'Get Token')
+                           Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: Column(
+                               children: [
+                                 Container(
+                                   width: double.maxFinite,
+                                   height: 50,
+                                   padding: const EdgeInsets.all(5.0),
+                                   decoration: CustomBoxDecoration.myCustomDecoration(),
+                                   child: TextFormField(
+                                     controller: nameController,
+                                     decoration: const InputDecoration(
+                                         hintText: "Enter Name",
+                                         contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                         border: InputBorder.none
+                                     ),
+                                     style: const TextStyle(fontSize: 14),
+                                     validator: (val) {
+                                       if (val!.isEmpty) {
+                                         return "Name cannot be empty";
+                                       } else if (val.length < 5) {
+                                         return "Please enter must 5 digit";
+                                       }
+                                     },
+                                   ),
+                                 ),
+                                 const SizedBox(
+                                   height: 15,
+                                 ),
+                                 Container(
+                                   width: double.maxFinite,
+                                   height: 50,
+                                   padding: const EdgeInsets.all(5.0),
+                                   decoration: CustomBoxDecoration.myCustomDecoration(),
+                                   child: TextFormField(
+                                     maxLength: 10,
+                                     keyboardType: TextInputType.number,
+                                     controller: mobileController,
+                                     decoration: const InputDecoration(
+                                         counterText: "",
+                                         hintText: "Mobile Number",
+                                         contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                         // prefixIcon: Icon(Icons.call),
+                                         border: InputBorder.none
+                                     ),
+                                     style: const TextStyle(fontSize: 14),
+                                     validator: (val) {
+                                       if (val!.isEmpty) {
+                                         return "Mobile cannot be empty";
+                                       } else if (val.length < 10) {
+                                         return "Please enter mobile must 10 digit";
+                                       }
+                                     },
+                                   ),
+                                 ),
+                                 const SizedBox(
+                                   height: 15,
+                                 ),
+                                 Container(
+                                   width: double.maxFinite,
+                                   height: 50,
+                                   padding: const EdgeInsets.all(5.0),
+                                   decoration: CustomBoxDecoration.myCustomDecoration(),
+                                   child: TextFormField(
+                                     controller: cityController,
+                                     decoration: const InputDecoration(
+                                         hintText: "City Name",
+                                         contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                                         border: InputBorder.none
+                                     ),
+                                     style: const TextStyle(fontSize: 14),
+                                     validator: (val) {
+                                       if (val!.isEmpty) {
+                                         return "City cannot be empty";
+                                       } else if (val.length < 5) {
+                                         return "Please enter must 5 digit";
+                                       }
+                                     },
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                            SizedBox(height: 20,),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: AppButton(
+                              title: 'SignUp',
+                              onTap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  if (selectedOption == 'Get Token') {
+
+                                    controller.registerUser(
+                                    mobile: mobileController.text,
+                                    name: nameController.text,
+                                      address: "",
+                                      city:cityController.text,
+                                      selected: false,
+                                    );
+                                  } else if (selectedOption == 'Get Counter') {
+                                    controller.registerUser(
+                                      mobile: mobileController.text,
+                                      name: nameController.text,
+                                      address: addressController.text,
+                                      city: cityController.text,
+                                      selected: true,
+                                    );
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "All field are required");
+                                }
+                              },
+                          ),
+                            ),
+                             Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Already have an account?",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
+                              ),
+                              TextButton(
                                 onPressed: () {
                                   Get.toNamed(loginScreen);
                                 },
@@ -125,21 +420,77 @@ class _SignupScreenState extends State<SignupScreen> {
                                   style: TextStyle(
                                       color: AppColors.whit,
                                       fontSize: 16,
-                                    fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.bold
                                   ),
                                 ),
-                            ),
-                          ],
-                        )
-                      ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
+
                 ),
               ),
-
 
             ),
           );
         });
+
+
   }
+  // reactive(){
+  //   return   Obx(
+  //         () =>
+  //         Padding(
+  //             padding: const EdgeInsets.symmetric(
+  //                 horizontal: 25),
+  //             child: controller.isLoading.value
+  //                 ? const Center(
+  //               child:
+  //               CircularProgressIndicator(),
+  //             ) : AppButton(
+  //               title: 'Sign Up',
+  //               onTap: () {
+  //                 if (mobileController.text.isEmpty &&
+  //                     nameController.text.isEmpty) {
+  //                   Fluttertoast.showToast(
+  //                       msg: "All Fields Required");
+  //                 } else
+  //                 if (mobileController.text.isEmpty ||
+  //                     mobileController.text.length <
+  //                         10) {
+  //                   Fluttertoast.showToast(
+  //                       msg: "Please Enter 10 digit number ");
+  //                 }
+  //
+  //                 else {
+  //                   controller.registerUser(
+  //                       mobile: mobileController.text,
+  //                       name: nameController.text,
+  //                       referral: referralController
+  //                           .text);
+  //                 }
+  //               },
+  //             )),
+  //   ),
+  //   const SizedBox(
+  //   height: 20,
+  //   ),
+  //
+  //   }
+
+
+  GetCatModel? getCatModel;
+  Future<void> getLottery() async {
+    apiBaseHelper.postAPICall2(getCatAPI).then((getData) {
+      setState(() {
+        getCatModel = GetCatModel.fromJson(getData);
+      });
+
+      //isLoading.value = false;
+    });
+  }
+
 }

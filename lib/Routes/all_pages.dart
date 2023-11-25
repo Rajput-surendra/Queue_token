@@ -14,6 +14,7 @@ import 'package:booknplay/Screens/Notice/notice_View.dart';
 import 'package:booknplay/Screens/Privacy_Policy/privacy_view.dart';
 import 'package:booknplay/Screens/Profile/profile_controller.dart';
 import 'package:booknplay/Screens/Profile/profile_view.dart';
+import 'package:booknplay/Screens/Search/search_view.dart';
 import 'package:booknplay/Screens/Splash/splash_screen.dart';
 import 'package:booknplay/Screens/Terms_Condition/terms_condition_view.dart';
 import 'package:booknplay/Screens/Winner/winner_view.dart';
@@ -56,7 +57,7 @@ class AllPages {
           binding: ScreenBindings()),
       GetPage(
           name: homeScreen,
-          page: () => const HomeScreen(),
+          page: () =>  HomeScreen(),
           binding: ScreenBindings()),
       GetPage(
           name: privacyScreen,
@@ -121,6 +122,10 @@ class AllPages {
       GetPage(
           name: enquiry,
           page: () => const Enquiry(),
+          binding: ScreenBindings()),
+      GetPage(
+          name: search,
+          page: () => const SearchScreen(),
           binding: ScreenBindings()),
 
     ];
