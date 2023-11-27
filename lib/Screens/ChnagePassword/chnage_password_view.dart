@@ -82,7 +82,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           Fluttertoast.showToast(msg: 'confirm password does not match');
                         }else {
 
-                          controller.changePassword();
+                        //  controller.changePassword();
 
                         }
 

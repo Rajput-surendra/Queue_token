@@ -1,7 +1,6 @@
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../Models/HomeModel/lottery_list_model.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({Key? key, this.isFrom,this.gId}) : super(key: key);
@@ -76,7 +75,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
 
-  LotteryListModel? lotteryDetailsModel;
+
 
 //   String ?userId;
 //   getLottery() async {

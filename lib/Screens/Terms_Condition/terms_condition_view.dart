@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:http/http.dart'as http;
 
 import '../../Local_Storage/shared_pre.dart';
 import '../../Utils/Colors.dart';
@@ -16,6 +20,7 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
   initState() {
     // TODO: implement initState
     super.initState();
+    getTermsApi();
 
   }
 
@@ -43,21 +48,47 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
             ),
           ),
         ),
-        body:const Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
+        body:SingleChildScrollView(
+          child: Padding(
+              padding: EdgeInsets.all(10.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                 Text("No Data Found!!!")
+                  termsAndCondition == null ? Center(child: CircularProgressIndicator()) :Html(
+                      data:"${termsAndCondition}"
+                  )
                 ],
-              ),
-            ),
+              )
           ),
         ),
       ),
     );
+  }
+
+  String? termsAndCondition;
+
+  getTermsApi() async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie': 'ci_session=8144c3169cc147b811c9d62284d8e56afb722df6'
+    };
+    var request = http.Request('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/apiGetContent'));
+    request.body = json.encode({
+      "content": "privacy_policy"
+    });
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      final result =  await response.stream.bytesToString();
+      final jsonResponse = json.decode(result);
+      setState(() {
+        termsAndCondition = jsonResponse['content'][0]['name'];
+      });
+
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+
   }
 
 }

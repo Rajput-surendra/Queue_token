@@ -43,25 +43,25 @@ class ForgotPasswordController extends AppBaseController {
     update();
   }
 
-  Future<void> forgotEmail(
-      {required String email}) async {
-       isLoading.value = true ;
-
-    var param = {
-      'email': email,
-    };
-    apiBaseHelper.postAPICall(forgotAPI, param).then((getData) {
-      bool error = getData['status'];
-      String msg = getData['message'];
-      if (error) {
-        Fluttertoast.showToast(msg: msg);
-        Get.toNamed(loginScreen);
-      } else {
-
-        Fluttertoast.showToast(msg: msg);
-
-      }
-      isLoading.value = false ;
-    });
-  }
+  // Future<void> forgotEmail(
+  //     {required String email}) async {
+  //      isLoading.value = true ;
+  //
+  //   var param = {
+  //     'email': email,
+  //   };
+  //   apiBaseHelper.postAPICall(forgotAPI, param).then((getData) {
+  //     bool error = getData['status'];
+  //     String msg = getData['message'];
+  //     if (error) {
+  //       Fluttertoast.showToast(msg: msg);
+  //       Get.toNamed(loginScreen);
+  //     } else {
+  //
+  //       Fluttertoast.showToast(msg: msg);
+  //
+  //     }
+  //     isLoading.value = false ;
+  //   });
+  // }
 }

@@ -27,30 +27,30 @@ final confirmPasswordController = TextEditingController();
 
 
 
-  Future<void> changePassword() async{
-
-
-    isLoading.value = true;
-
-    var param = {
-      'user_id': usedata.id.toString(),
-      'old_password': oldPasswordController.text,
-      'new_password': newPasswordController.text,
-    };
-    apiBaseHelper.postAPICall(changePasswordAPI, param).then((getData) {
-      bool error = getData['status'];
-      String msg = getData['message'];
-
-      if (error) {
-        Fluttertoast.showToast(msg: msg);
-        oldPasswordController.clear();
-      newPasswordController.clear();
-      confirmPasswordController.clear();
-      } else {
-        Fluttertoast.showToast(msg: msg);
-      }
-      isLoading.value = false;
-    });
-  }
+  // Future<void> changePassword() async{
+  //
+  //
+  //   isLoading.value = true;
+  //
+  //   var param = {
+  //     'user_id': usedata.id.toString(),
+  //     'old_password': oldPasswordController.text,
+  //     'new_password': newPasswordController.text,
+  //   };
+  //   apiBaseHelper.postAPICall(changePasswordAPI, param).then((getData) {
+  //     bool error = getData['status'];
+  //     String msg = getData['message'];
+  //
+  //     if (error) {
+  //       Fluttertoast.showToast(msg: msg);
+  //       oldPasswordController.clear();
+  //     newPasswordController.clear();
+  //     confirmPasswordController.clear();
+  //     } else {
+  //       Fluttertoast.showToast(msg: msg);
+  //     }
+  //     isLoading.value = false;
+  //   });
+  // }
 
 }

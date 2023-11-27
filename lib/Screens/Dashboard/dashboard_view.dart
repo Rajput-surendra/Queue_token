@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import '../Bookings/my_booking_view.dart';
 import '../Home/home_view.dart';
 import '../Profile/profile_view.dart';
-import '../Result/result_view.dart';
 class DashBoardScreen extends StatefulWidget {
   DashBoardScreen({Key? key,this.nameC,this.cityC,this.catId,this.counterId}) : super(key: key);
   String? nameC,cityC,catId,counterId;

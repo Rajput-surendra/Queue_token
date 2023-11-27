@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:booknplay/Constants.dart';
-import 'package:booknplay/Screens/Profile/profile_controller.dart';
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:booknplay/Utils/custom_clip_path.dart';
 import 'package:booknplay/Widgets/app_button.dart';
@@ -48,6 +47,11 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
         backgroundColor: AppColors.whit,
         appBar: AppBar(
+          leading: InkWell(
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
+            },
+              child: Icon(Icons.arrow_back)),
           automaticallyImplyLeading: false,
 
           shape: const RoundedRectangleBorder(

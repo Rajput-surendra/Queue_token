@@ -35,6 +35,7 @@ class SignupController extends AppBaseController {
     apiBaseHelper.postAPICall(getUserRegister, param).then((getData) {
       bool status = getData['status'];
       String msg = getData['msg'];
+      // String msg = getData['msg'];
       if (status) {
         Get.toNamed(otpScreen, arguments: [mobile, getData['otp']]);
         Fluttertoast.showToast(msg: msg);

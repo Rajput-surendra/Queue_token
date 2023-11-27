@@ -85,7 +85,7 @@ class _UserLogin extends State<ForgotPasswordScreen> {
                                         title: 'Submit',
                                         onTap: () {
                                           if(_formKey.currentState!.validate()) {
-                                            controller.forgotEmail(email: emailController.text,);
+                                        //    controller.forgotEmail(email: emailController.text,);
                                           }
                                         },
                                       )),

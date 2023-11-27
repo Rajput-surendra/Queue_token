@@ -123,15 +123,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                      child: TextFormField(
                                        controller: nameController,
                                        decoration: const InputDecoration(
-                                           hintText: "Enter Name",
+                                           hintText: "Company Name",
                                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
                                          border: InputBorder.none
                                        ),
                                        style: const TextStyle(fontSize: 14),
                                        validator: (val) {
                                          if (val!.isEmpty) {
-                                           return "Name cannot be empty";
-                                         } else if (val.length < 5) {
+                                           return "Company name cannot be empty";
+                                         } else if (val.length < 4) {
                                            return "Please enter must 5 digit";
                                          }
                                        },
@@ -185,7 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         validator: (val) {
                                           if (val!.isEmpty) {
                                             return "City cannot be empty";
-                                          } else if (val.length < 5) {
+                                          } else if (val.length < 4) {
                                             return "Please enter must 5 digit";
                                           }
                                         },
@@ -210,7 +210,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         validator: (val) {
                                           if (val!.isEmpty) {
                                             return "Address cannot be empty";
-                                          } else if (val.length < 5) {
+                                          } else if (val.length < 4) {
                                             return "Please enter must 5 digit";
                                           }
                                         },
@@ -219,65 +219,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    // Container(
-                                    //   width: double.infinity,
-                                    //   child: Card(
-                                    //
-                                    //     elevation: 2,
-                                    //     child: Padding(
-                                    //       padding: const EdgeInsets.all(2.0),
-                                    //       child: DropdownButtonHideUnderline(
-                                    //         child: DropdownButton2<SignUpCat>(
-                                    //           hint:  const Text("Select Category",
-                                    //             style: TextStyle(
-                                    //                 color: AppColors.fntClr,fontWeight: FontWeight.w500,fontSize:15
-                                    //             ),),
-                                    //           value: animalCat,
-                                    //           icon:  Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.secondary,size: 30,),
-                                    //           style:  const TextStyle(color: AppColors.secondary,fontWeight: FontWeight.bold),
-                                    //           underline: Padding(
-                                    //             padding: const EdgeInsets.only(left: 0,right: 0),
-                                    //             child: Container(
-                                    //
-                                    //               // height: 2,
-                                    //               color:  AppColors.whit,
-                                    //             ),
-                                    //           ),
-                                    //           onChanged: (SignUpCat? value) {
-                                    //             setState(() {
-                                    //               animalCat = value!;
-                                    //               catId =  animalCat?.id;
-                                    //               // animalCountApi(animalCat!.id);
-                                    //             });
-                                    //           },
-                                    //           items: controller.getCatModel?.data?.map((items) {
-                                    //             return DropdownMenuItem(
-                                    //               value: items,
-                                    //               child:  Column(
-                                    //                 crossAxisAlignment: CrossAxisAlignment.start,
-                                    //                 mainAxisAlignment: MainAxisAlignment.center,
-                                    //                 children: [
-                                    //                   Padding(
-                                    //                     padding: const EdgeInsets.only(top: 2),
-                                    //                     child: Container(
-                                    //
-                                    //                         child: Padding(
-                                    //                           padding: const EdgeInsets.only(top: 0),
-                                    //                           child: Text(items.name.toString(),overflow:TextOverflow.ellipsis,style: const TextStyle(color: AppColors.fntClr),),
-                                    //                         )),
-                                    //                   ),
-                                    //
-                                    //                 ],
-                                    //               ),
-                                    //             );
-                                    //           })
-                                    //               .toList(),
-                                    //         ),
-                                    //
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 )
 
@@ -298,14 +239,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                    child: TextFormField(
                                      controller: nameController,
                                      decoration: const InputDecoration(
-                                         hintText: "Enter Name",
+                                         hintText: "Company Name",
                                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
                                          border: InputBorder.none
                                      ),
                                      style: const TextStyle(fontSize: 14),
                                      validator: (val) {
                                        if (val!.isEmpty) {
-                                         return "Name cannot be empty";
+                                         return "Company name cannot be empty";
                                        } else if (val.length < 5) {
                                          return "Please enter must 5 digit";
                                        }

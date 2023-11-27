@@ -23,10 +23,9 @@ RxBool isLoading = false.obs ;
   List data = [] ;
   String otp = '' ;
 
-
+  String? role;
   Future<void> verifyOTP() async {
     isLoading.value = true ;
-
     var param = {
       'mobile': data[0].toString(),
       'otp': otp,
@@ -34,23 +33,23 @@ RxBool isLoading = false.obs ;
     apiBaseHelper.postAPICall(verifyOTPAPI, param).then((getData) {
       bool status = getData['status'];
       String msg = getData['msg'];
-
+       role = getData['role'];
+      print('_____role_____${role}_________');
       if (status) {
-
         SharedPre.setValue('userData', getData['user_name']);
         SharedPre.setValue('userMobile', getData['mobile']);
         SharedPre.setValue('userReferCode', getData['referral_code']);
         SharedPre.setValue('balanceUser', getData['wallet_balance']);
         SharedPre.setValue('userId', getData['user_id'].toString());
-
+        SharedPre.setValue('userRole', getData['role']);
         Fluttertoast.showToast(msg: msg);
-        Get.toNamed(search);
-
-
+        if(role == "user"){
+          Get.offAllNamed(search);
+        }else{
+          Get.offAllNamed(bottomBar);
+        }
       } else {
-
         Fluttertoast.showToast(msg: msg);
-
       }
       isLoading.value = false ;
     });

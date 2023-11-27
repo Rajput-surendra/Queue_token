@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:booknplay/Screens/Bookings/my_booking_controller.dart';
 import 'package:booknplay/Services/api_services/apiStrings.dart';
 import 'package:booknplay/Utils/Colors.dart';
@@ -8,9 +10,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../Local_Storage/shared_pre.dart';
-import '../../Models/HomeModel/lottery_model.dart';
-import '../../Models/HomeModel/my_lottery_model.dart';
+
+import '../../Models/get_token_list_model.dart';
 import '../../Services/api_services/apiConstants.dart';
+import 'package:http/http.dart'as http;
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({Key? key, this.isFrom}) : super(key: key);
@@ -30,18 +33,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
   String? userId;
   getUser() async {
     userId = await SharedPre.getStringValue('userId');
-    getLottery();
+    getBookingApi();
   }
-  LotteryModel? lotteryModel;
-  Future<void> getLottery() async {
-    apiBaseHelper.postAPICall2(getLotteryAPI).then((getData) {
-      setState(() {
-        lotteryModel = LotteryModel.fromJson(getData);
-      });
 
-      //isLoading.value = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,150 +62,164 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         ),
       ),
       body:  SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Container(
-                        //height: MediaQuery.of(context).size.height/1.1,
-                        child: lotteryModel == null ? Center(child: CircularProgressIndicator()):ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount:lotteryModel!.data!.lotteries!.length ,
-                            // itemCount:2,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                // onTap: (){
-                                //   if( lotteryModel!.data!.lotteries?[index].active == '0' ){
-                                //     Fluttertoast.showToast(msg: "Booking not yet to be start");
-                                //   }else{
-                                //     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerScreen(gId:lotteryModel?.data?.lotteries?[index].gameId )));
-                                //   }
-                                //
-                                //   //Get.toNamed(winnerScreen,arguments:lotteryModel?.data?.lotteries?[index].gameId );
-                                // },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Container(
-                                      height: 115,
-                                      decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                              image: AssetImage("assets/images/lotteryback.png"), fit: BoxFit.fill)),
-                                      child:  Column(
+        child:Container(
+          child:getTokenListModel == null ? Center(child: CircularProgressIndicator()): getTokenListModel!.data!.length == "0" ?  Text("data"):ListView.builder(
+              itemCount:getTokenListModel!.data!.length ,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: (){},
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: getTokenListModel!.data! == "" ? Text("Not Tood") : Container(
+                        height: 120,
+                        width: 280,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("assets/images/lotteryback.png"), fit: BoxFit.fill)),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10,top: 12),
+                                  child: Row(
+                                    children: [
+                                      Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                      SizedBox(width: 2,),
+                                      Row(
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 10,right: 10,top: 5),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-
-                                                Row(
-                                                  children: [
-                                                    SizedBox(height: 25,),
-                                                    Text("Open:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                    SizedBox(width: 2,),
-                                                    Text("${lotteryModel!.data!.lotteries![index].openTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(height: 25,),
-                                                    Text("Close:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                    SizedBox(width: 2,),
-                                                    Text("${lotteryModel!.data!.lotteries![index].closeTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 10,right: 10,top: 15),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(height: 35,),
-                                                      Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              Text("Dr.Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                              SizedBox(width: 2,),
-                                                              Text("Surendra",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              SizedBox(height: 10,),
-                                                              Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                              SizedBox(width: 2,),
-                                                              Text("16",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
-                                                            ],
-                                                          )
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text("Date :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                    SizedBox(width: 2,),
-                                                    Text("${lotteryModel!.data!.lotteries![index].resultDate}",style: TextStyle(color: AppColors.fntClr,fontSize: 12),)
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-
+                                          Text("${getTokenListModel!.data![index].time}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                         ],
                                       )
+                                    ],
                                   ),
                                 ),
-                              );
-                            }
-                        ),
-                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8,top: 6),
+                                  child: Row(
+                                    children: [
+                                      Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                      SizedBox(width: 2,),
+                                      Text("${getTokenListModel!.data![index].date!}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 5,),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Column(
+                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                          SizedBox(width: 2,),
+                                          Text("${getTokenListModel!.data![index].name}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Row(
+                                        children: [
+                                          SizedBox(height: 10,),
+                                          Text("Mobile :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                          SizedBox(width: 2,),
+                                          Text("${getTokenListModel!.data![index].mobile!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          SizedBox(height: 5,),
+                                          Text("My Token :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                          SizedBox(width: 2,height: 5,),
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50),
+                                              color: AppColors.secondary,
+                                            ),
+                                            child: Center(child: Text("${getTokenListModel!.data![index].tokenNumber}",style: TextStyle(color: AppColors.whit),)),
+                                          )
+
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 5,),
+                                          Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                          SizedBox(width: 2,height: 5,),
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50),
+                                              color: AppColors.secondary1,
+                                            ),
+                                            child: Center(child: Text("${getTokenListModel!.data![index].tokenNumber}",style: TextStyle(color: AppColors.whit),)),
+                                          )
+
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10,)
+
+                                ],
+                              ),
+                            )
+                          ],
+                        )
                     ),
-
-                  ],
-                ),
-              ),
-
-            ],
+                  ),
+                );
+              }
           ),
         ),
       )
     ) ;
   }
 
-  // MyLotteryModel? myLotteryModel;
-  // Future<void> getLottery() async {
-  //   // isLoading.value = true;
-  //   var param = {
-  //     'user_id':userId
-  //   };
-  //   apiBaseHelper.postAPICall(getLotteryAPI, param).then((getData) {
-  //     String msg = getData['msg'];
-  //     myLotteryModel = MyLotteryModel.fromJson(getData);
-  //     // Fluttertoast.showToast(msg: msg);
-  //
-  //     //isLoading.value = false;
-  //   });
-  // }
+  GetTokenListModel? getTokenListModel;
+
+  getBookingApi() async {
+    var headers = {
+      'Cookie': 'ci_session=54b75d7a8d31a31e8269c4131f4e43bd2f9eabf2'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/my_booking'));
+    request.fields.addAll({
+      'user_id': '72'
+    });
+
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+     var result = await response.stream.bytesToString();
+     var finalResult = GetTokenListModel.fromJson(jsonDecode(result));
+     setState(() {
+       getTokenListModel = finalResult;
+     });
+    }
+    else {
+    print(response.reasonPhrase);
+    }
+
+  }
 }

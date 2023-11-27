@@ -184,10 +184,10 @@ class NextDayTokens {
       String? toTime, 
       String? totalToken, 
       String? date, 
-      String? createdAt, 
-      num? availableToken, 
-      num? currentToken, 
-      num? nextToken,}){
+      String? createdAt,
+    String? availableToken,
+    String? currentToken,
+    String? nextToken,}){
     _id = id;
     _userName = userName;
     _counterId = counterId;
@@ -228,9 +228,9 @@ class NextDayTokens {
   String? _totalToken;
   String? _date;
   String? _createdAt;
-  num? _availableToken;
-  num? _currentToken;
-  num? _nextToken;
+  String? _availableToken;
+  String? _currentToken;
+  String? _nextToken;
 NextDayTokens copyWith({  String? id,
   String? userName,
   String? counterId,
@@ -241,9 +241,9 @@ NextDayTokens copyWith({  String? id,
   String? totalToken,
   String? date,
   String? createdAt,
-  num? availableToken,
-  num? currentToken,
-  num? nextToken,
+  String? availableToken,
+  String? currentToken,
+  String? nextToken,
 }) => NextDayTokens(  id: id ?? _id,
   userName: userName ?? _userName,
   counterId: counterId ?? _counterId,
@@ -268,9 +268,9 @@ NextDayTokens copyWith({  String? id,
   String? get totalToken => _totalToken;
   String? get date => _date;
   String? get createdAt => _createdAt;
-  num? get availableToken => _availableToken;
-  num? get currentToken => _currentToken;
-  num? get nextToken => _nextToken;
+  String? get availableToken => _availableToken;
+  String? get currentToken => _currentToken;
+  String? get nextToken => _nextToken;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -412,10 +412,10 @@ class TodayTokens {
       String? toTime, 
       String? totalToken, 
       String? date, 
-      String? createdAt, 
-      num? availableToken, 
-      num? currentToken, 
-      num? nextToken,}){
+      String? createdAt,
+    String? availableToken,
+    String? currentToken,
+    String? nextToken,}){
     _id = id;
     _userName = userName;
     _counterId = counterId;
@@ -456,9 +456,9 @@ class TodayTokens {
   String? _totalToken;
   String? _date;
   String? _createdAt;
-  num? _availableToken;
-  num? _currentToken;
-  num? _nextToken;
+  String? _availableToken;
+  String? _currentToken;
+  String? _nextToken;
 TodayTokens copyWith({  String? id,
   String? userName,
   String? counterId,
@@ -469,9 +469,9 @@ TodayTokens copyWith({  String? id,
   String? totalToken,
   String? date,
   String? createdAt,
-  num? availableToken,
-  num? currentToken,
-  num? nextToken,
+  String? availableToken,
+  String? currentToken,
+  String? nextToken,
 }) => TodayTokens(  id: id ?? _id,
   userName: userName ?? _userName,
   counterId: counterId ?? _counterId,
@@ -496,9 +496,9 @@ TodayTokens copyWith({  String? id,
   String? get totalToken => _totalToken;
   String? get date => _date;
   String? get createdAt => _createdAt;
-  num? get availableToken => _availableToken;
-  num? get currentToken => _currentToken;
-  num? get nextToken => _nextToken;
+  String? get availableToken => _availableToken;
+  String? get currentToken => _currentToken;
+  String? get nextToken => _nextToken;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

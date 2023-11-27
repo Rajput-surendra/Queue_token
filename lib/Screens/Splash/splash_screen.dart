@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:booknplay/Screens/Search/search_view.dart';
 import 'package:booknplay/Screens/Splash/splash_controller.dart';
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +57,16 @@ class SplashScreen extends StatelessWidget {
     final isLogin2 = await SharedPre.getStringValue('userId');
     Future.delayed(const Duration(seconds: 1), () async {
       final isLogin = await SharedPre.getStringValue('userId');
+      final role = await SharedPre.getStringValue('userRole');
       if (isLogin != null && isLogin != '') {
-        Get.offAllNamed(bottomBar);
+        // Navigator.push(MaterialPageRoute(builder: (context)=>SearchScreen()));
+         if(role == "user"){
+           Get.offAllNamed(search);
+         }else{
+           Get.offAllNamed(bottomBar);
+         }
+
+        //Get.offAllNamed(bottomBar);
       } else {
         Get.offAllNamed(loginScreen);
       }

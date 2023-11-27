@@ -3,25 +3,22 @@ import 'dart:convert';
 import 'package:booknplay/Constants.dart';
 import 'package:booknplay/Routes/routes.dart';
 import 'package:booknplay/Screens/Auth_Views/Login/login_view.dart';
-import 'package:booknplay/Screens/Profile/profile_controller.dart';
-import 'package:booknplay/Screens/Withdrawal/withdrawal_view.dart';
+import 'package:booknplay/Services/api_services/apiConstants.dart';
+
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:booknplay/Utils/custom_clip_path.dart';
 import 'package:booknplay/Widgets/commen_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../Local_Storage/shared_pre.dart';
 import '../../Models/HomeModel/get_profile_model.dart';
-import '../../Services/api_services/apiConstants.dart';
-import '../../Services/api_services/apiStrings.dart';
-import '../FaQ/faq_view.dart';
-import '../My Transaction/transaction_view.dart';
+
 import 'package:http/http.dart'as http;
 
+import '../Subscription/purchage_plan_view.dart';
 import 'edit_profile.dart';
 class ProfileScreen extends StatefulWidget {
    ProfileScreen({Key? key, this.isFrom}) : super(key: key);
@@ -50,26 +47,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
   GetProfileModel? getProfileModel;
-  // Future<void> getProfile() async {
-  //   var param = {
-  //     'user_id': userId.toString()
-  //   };
-  //   print('____param______${param}_________');
-  //   apiBaseHelper.postAPICall(getProfileAPI, param).then((getData) {
-  //
-  //     getProfileModel = GetProfileModel.fromJson(getData);
-  //    // Fluttertoast.showToast(msg: msg);
-  //
-  //     //isLoading.value = false;
-  //   });
-  // }
+
 
   get() async {
     var headers = {
       'Content-Type': 'application/json',
       'Cookie': 'ci_session=68b65db8a6659ad0354398bd4cd6449fc10b9b7f'
     };
-    var request = http.Request('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/apiGetProfile'));
+    var request = http.Request('POST', Uri.parse('$baseUrl1/Apicontroller/apiGetProfile'));
     request.body = json.encode({
       "user_id": userId.toString()
     });
@@ -169,12 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
-              //  Center(
-              //     child: Text(
-              //   controller.name,
-              //   style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              // )),
-              // isEditProfile ? const SizedBox.shrink() :
+
               Padding(
                 padding:  EdgeInsets.all(8.0),
                 child: Column(
@@ -323,34 +303,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //   ),
                     // ),
                     // SizedBox(height: 10,),
-                    // InkWell(
-                    //   onTap: (){
-                    //     Get.toNamed(invitation);
-                    //   },
-                    //   child: Container(
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(7),
-                    //         border: Border.all(color: AppColors.fntClr)
-                    //     ),
-                    //     child:  Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Row(
-                    //             children: [
-                    //               Image.asset("assets/images/My Invitation.png",height: 20,color: AppColors.profileColor,),
-                    //               SizedBox(width: 10,),
-                    //               Text("My Invitation",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
-                    //             ],
-                    //           ),
-                    //           Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    InkWell(
+                      onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPlanListScreen()));
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            border: Border.all(color: AppColors.fntClr)
+                        ),
+                        child:  Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset("assets/images/My Invitation.png",height: 20,color: AppColors.profileColor,),
+                                  SizedBox(width: 10,),
+                                  Text("My Plan",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10,),
                     // SizedBox(height: 10,),
                     // InkWell(
                     //   onTap: (){
@@ -756,51 +737,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget textFieldContainer(
-      IconData icon, String title, ProfileController controller, TextEditingController textEditingController) {
-    return Column(
-      children: [
-        textviewRow(title, icon),
-        otherTextField(controller: textEditingController),
-      ],
-    );
-  }
+  // Widget textFieldContainer(
+  //     IconData icon, String title, ProfileController controller, TextEditingController textEditingController) {
+  //   return Column(
+  //     children: [
+  //       textviewRow(title, icon),
+  //       otherTextField(controller: textEditingController),
+  //     ],
+  //   );
+  // }
+  //
+  // Widget textviewRow(String title, IconData icon) {
+  //   return Row(children: [
+  //     Icon(icon, color: AppColors.secondary,),
+  //     const SizedBox(
+  //       width: 5,
+  //     ),
+  //     Text(title, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),)
+  //   ]);
+  // }
 
-  Widget textviewRow(String title, IconData icon) {
-    return Row(children: [
-      Icon(icon, color: AppColors.secondary,),
-      const SizedBox(
-        width: 5,
-      ),
-      Text(title, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),)
-    ]);
-  }
-
-  Future showOptions(BuildContext context, ProfileController controller) async {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-            child: const Text('Photo Gallery'),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-              // get image from gallery
-              controller.getImageFromGallery();
-            },
-          ),
-          CupertinoActionSheetAction(
-            child: const Text('Camera'),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-              // get image from camera
-              controller.getImageFromCamera();
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  // Future showOptions(BuildContext context, ProfileController controller) async {
+  //   showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (context) => CupertinoActionSheet(
+  //       actions: [
+  //         CupertinoActionSheetAction(
+  //           child: const Text('Photo Gallery'),
+  //           onPressed: () {
+  //             // close the options modal
+  //             Navigator.of(context).pop();
+  //             // get image from gallery
+  //             controller.getImageFromGallery();
+  //           },
+  //         ),
+  //         CupertinoActionSheetAction(
+  //           child: const Text('Camera'),
+  //           onPressed: () {
+  //             // close the options modal
+  //             Navigator.of(context).pop();
+  //             // get image from camera
+  //             controller.getImageFromCamera();
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

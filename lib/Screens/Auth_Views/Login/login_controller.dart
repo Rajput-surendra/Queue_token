@@ -40,44 +40,44 @@ class LoginController extends AppBaseController {
     login = value;
     update();
   }
-
-  Future<void> loginUser({
-    required String email,
-    required String password,
-  }) async {
-    isLoading.value = true;
-
-    var param = {
-      'email': email,
-      'password': password,
-      'device_key': '9638528510',
-    };
-    apiBaseHelper.postAPICall(getUserLogin, param).then((getData) async {
-      bool error = getData['status'];
-      String msg = getData['message'];
-
-      if (error) {
-        Fluttertoast.showToast(msg: msg);
-
-        User? userData = User();
-
-        userData = User.fromJson(getData['user']);
-
-        SharedPre.setValue(SharedPre.userData, userData.toJson());
-        SharedPre.setValue(SharedPre.isLogin, true);
-
-        // SharedPre.setValue('userData', jsonEncode(getData['user']));
-        Get.toNamed(bottomBar);
-
-        //String user = await SharedPre.getStringValue('userData');
-
-        //var data = jsonDecode(user);
-      } else {
-        Fluttertoast.showToast(msg: msg);
-      }
-      isLoading.value = false;
-    });
-  }
+  //
+  // Future<void> loginUser({
+  //   required String email,
+  //   required String password,
+  // }) async {
+  //   isLoading.value = true;
+  //
+  //   var param = {
+  //     'email': email,
+  //     'password': password,
+  //     'device_key': '9638528510',
+  //   };
+  //   apiBaseHelper.postAPICall(getUserLogin, param).then((getData) async {
+  //     bool error = getData['status'];
+  //     String msg = getData['message'];
+  //
+  //     if (error) {
+  //       Fluttertoast.showToast(msg: msg);
+  //
+  //       User? userData = User();
+  //
+  //       userData = User.fromJson(getData['user']);
+  //
+  //       SharedPre.setValue(SharedPre.userData, userData.toJson());
+  //       SharedPre.setValue(SharedPre.isLogin, true);
+  //
+  //       // SharedPre.setValue('userData', jsonEncode(getData['user']));
+  //       Get.toNamed(bottomBar);
+  //
+  //       //String user = await SharedPre.getStringValue('userData');
+  //
+  //       //var data = jsonDecode(user);
+  //     } else {
+  //       Fluttertoast.showToast(msg: msg);
+  //     }
+  //     isLoading.value = false;
+  //   });
+  // }
 
   Future<void> sendOtp({required String mobile}) async {
     update();

@@ -12,17 +12,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../Models/HomeModel/get_result_model.dart';
+import '../../Local_Storage/shared_pre.dart';
 import '../../Models/HomeModel/get_slider_model.dart';
-import '../../Models/HomeModel/lottery_model.dart';
+
 import '../../Models/get_counter_model.dart';
 import '../../Services/api_services/apiConstants.dart';
 import '../../Services/api_services/apiStrings.dart';
 import '../Counter/counter_view.dart';
+import '../CreateToken/create_token_view.dart';
 import '../Notification/notification_view.dart';
 import '../Search/search_view.dart';
-import '../Winner/winner_view.dart';
+
 import 'package:http/http.dart'as http;
+
+import '../Subscription/sub_plan_view.dart';
 
 class HomeScreen extends StatefulWidget {
    HomeScreen({Key? key,this.nameC,this.cityC,this.catId,this.counterId}) : super(key: key);
@@ -39,14 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     getSlider();
     getFilterApi();
-    print('____userName______${userName}_________');
+    referCode();
 
   }
+  String? userRole;
+  referCode() async {
+    userRole = await SharedPre.getStringValue('userRole');
+    setState(() {
 
+    });
+  }
   final CarouselController carouselController = CarouselController();
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.whit,
@@ -60,8 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
           toolbarHeight: 60,
           title: const Text("QUEUE TOKEN",style: TextStyle(fontSize: 17),),
           actions: [
-            Icon(Icons.search),
-            SizedBox(width: 15,),
+            InkWell(onTap: (){
+              Navigator.pop(context);
+
+            },
+                child: const Icon(Icons.search)),
+            const SizedBox(width: 15,),
             Padding(
               padding: const EdgeInsets.only(right: 10
               ),
@@ -84,17 +96,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
-        body:getSliderModel == null ?Center(child: CircularProgressIndicator()) :RefreshIndicator(
-          onRefresh: () {
-            return Future.delayed(Duration(seconds: 2),(){
-              getSlider();
-              getFilterApi();
+        body: userRole == "user" ? userUI() :counterUI()
+      ),
+    );
+  }
 
-            });
-          },
-          child: ListView.builder(
-            itemCount: 1,
-              itemBuilder: (context,i){
+
+
+  ///////////////////////UserSite//////////////////
+  userUI(){
+    return getSliderModel == null ?const Center(child: CircularProgressIndicator()) :RefreshIndicator(
+      onRefresh: () {
+        return Future.delayed(const Duration(seconds: 2),(){
+          getSlider();
+          getFilterApi();
+
+        });
+      },
+      child: ListView.builder(
+          itemCount: 1,
+          itemBuilder: (context,i){
             return  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -186,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Container(
                                 height: 110,
-                                child:getCounterModel == null ?Center(child: CircularProgressIndicator()): ListView.builder(
+                                child:getCounterModel == null ?const Center(child: CircularProgressIndicator()): ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount:getCounterModel!.todaysTokens![0].todayTokens!.length ,
                                     itemBuilder: (context, index) {
@@ -198,9 +219,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             date:getCounterModel!.todaysTokens![0].todayTokens![index].date ,
                                             fTime: getCounterModel!.todaysTokens![0].todayTokens![index].fromTime,
                                             toTime: getCounterModel!.todaysTokens![0].todayTokens![index].toTime,
-                                          tTotal: getCounterModel!.todaysTokens![0].todayTokens![index].totalToken,)));
+                                            tTotal: getCounterModel!.todaysTokens![0].todayTokens![index].totalToken,)));
                                         },
-                                        child: Padding(
+                                        child: getCounterModel!.todaysTokens![0].todayTokens!.length == 0 ? const Text("fddfgfdfgfd"):Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Container(
                                               height: 100,
@@ -217,12 +238,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         padding: const EdgeInsets.only(left: 10,top: 6),
                                                         child: Row(
                                                           children: [
-                                                            Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                            SizedBox(width: 2,),
+                                                            const Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                            const SizedBox(width: 2,),
                                                             Row(
                                                               children: [
-                                                                Text("${getCounterModel!.todaysTokens![0].todayTokens![index].fromTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                                Text(" to ${getCounterModel!.todaysTokens![0].todayTokens![index].toTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                                Text("${getCounterModel!.todaysTokens![0].todayTokens![index].fromTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                                Text(" to ${getCounterModel!.todaysTokens![0].todayTokens![index].toTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
                                                               ],
                                                             )
                                                           ],
@@ -233,9 +254,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         child: Row(
                                                           children: [
 
-                                                            Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                            SizedBox(width: 2,),
-                                                            Text("${getCounterModel!.todaysTokens![0].todayTokens![index].date!}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                            const Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                            const SizedBox(width: 2,),
+                                                            Text("${getCounterModel!.todaysTokens![0].todayTokens![index].date!}",style: const TextStyle(color: AppColors.whit,fontSize: 12),)
                                                           ],
                                                         ),
                                                       )
@@ -247,35 +268,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                         Padding(
-                                                          padding: EdgeInsets.all(8.0),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
                                                           child: Row(
                                                             children: [
-                                                              SizedBox(height: 2,),
+                                                              const SizedBox(height: 2,),
                                                               Column(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: [
                                                                   Row(
                                                                     children: [
-                                                                      Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                      SizedBox(width: 2,),
-                                                                      Text("${getCounterModel!.todaysTokens![0].compnyName}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                      const Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      const SizedBox(width: 2,),
+                                                                      Text("${getCounterModel!.todaysTokens![0].compnyName}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                     ],
                                                                   ),
                                                                   Row(
                                                                     children: [
-                                                                      SizedBox(height: 10,),
-                                                                      Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                      SizedBox(width: 2,),
-                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].userName!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                      const SizedBox(height: 10,),
+                                                                      const Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      const SizedBox(width: 2,),
+                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].userName!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                     ],
                                                                   ),
                                                                   Row(
                                                                     children: [
-                                                                      SizedBox(height: 10,),
-                                                                      Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                      SizedBox(width: 2,),
-                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].availableToken!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                      const SizedBox(height: 10,),
+                                                                      const Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      const SizedBox(width: 2,),
+                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].availableToken!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                     ],
                                                                   )
                                                                 ],
@@ -283,36 +304,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                         Row(
+                                                        Row(
                                                           children: [
-                                                           Column(
-                                                             crossAxisAlignment: CrossAxisAlignment.end,
-                                                             children: [
-                                                               Row(
-                                                                 children: [
-                                                                   Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                   SizedBox(width: 2,),
-                                                                   Text("${getCounterModel!.todaysTokens![0].todayTokens![index].totalToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                                 ],
-                                                               ),
-                                                             Row(
-                                                               children: [
-                                                                 Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                 SizedBox(width: 2,),
-                                                                 Text("${getCounterModel!.todaysTokens![0].todayTokens![index].currentToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                               ],
-                                                             ),
-                                                               SizedBox(height: 2,),
-                                                               Row(
-                                                                 children: [
-                                                                   Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                   SizedBox(width: 2,),
-                                                                   Text("${getCounterModel!.todaysTokens![0].todayTokens![index].nextToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                                 ],
-                                                               ),
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    const Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    const SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.todaysTokens![0].todayTokens![index].totalToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    const Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    const SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.todaysTokens![0].todayTokens![index].currentToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(height: 2,),
+                                                                Row(
+                                                                  children: [
+                                                                    const Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    const SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.todaysTokens![0].todayTokens![index].nextToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  ],
+                                                                ),
 
-                                                             ],
-                                                           )
+                                                              ],
+                                                            )
                                                           ],
                                                         ),
                                                       ],
@@ -347,13 +368,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           InkWell(
                             onTap: (){
                               // Get.toNamed(winnerScreen);
                             },
                             child: Container(
-                              child:getCounterModel == null ?Center(child: CircularProgressIndicator()): ListView.builder(
+                              child:getCounterModel == null ? const Center(child: CircularProgressIndicator()): getCounterModel!.upcomingTokens![0].nextDayTokens!.length == "0" ?  const Text("data"):ListView.builder(
                                   itemCount:getCounterModel!.upcomingTokens![0].nextDayTokens!.length ,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
@@ -365,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: Container(
+                                        child: getCounterModel!.upcomingTokens! == "" ? const Text("Not Tood") : Container(
                                             height: 100,
                                             width: 280,
                                             decoration: const BoxDecoration(
@@ -380,12 +401,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       padding: const EdgeInsets.only(left: 10,top: 6),
                                                       child: Row(
                                                         children: [
-                                                          Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                          SizedBox(width: 2,),
+                                                          const Text("Time:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                          const SizedBox(width: 2,),
                                                           Row(
                                                             children: [
-                                                              Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].fromTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                              Text(" to ${getCounterModel!.upcomingTokens![0].nextDayTokens![index].toTime}",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                              Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].fromTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                              Text(" to ${getCounterModel!.upcomingTokens![0].nextDayTokens![index].toTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
                                                             ],
                                                           )
                                                         ],
@@ -396,9 +417,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       child: Row(
                                                         children: [
 
-                                                          Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                          SizedBox(width: 2,),
-                                                          Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].date!}",style: TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                          const Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                          const SizedBox(width: 2,),
+                                                          Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].date!}",style: const TextStyle(color: AppColors.whit,fontSize: 12),)
                                                         ],
                                                       ),
                                                     )
@@ -411,34 +432,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Padding(
-                                                        padding: EdgeInsets.all(8.0),
+                                                        padding: const EdgeInsets.all(8.0),
                                                         child: Row(
                                                           children: [
-                                                            SizedBox(height: 2,),
+                                                            const SizedBox(height: 2,),
                                                             Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                    SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.upcomingTokens![0].compnyName}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                    const Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    const SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.upcomingTokens![0].compnyName}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                   ],
                                                                 ),
                                                                 Row(
                                                                   children: [
-                                                                    SizedBox(height: 10,),
-                                                                    Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                    SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].userName!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                    const SizedBox(height: 10,),
+                                                                    const Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    const SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].userName!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                   ],
                                                                 ),
                                                                 Row(
                                                                   children: [
-                                                                    SizedBox(height: 10,),
-                                                                    Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                    SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].availableToken!}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                    const SizedBox(height: 10,),
+                                                                    const Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                    const SizedBox(width: 2,),
+                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].availableToken!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                   ],
                                                                 )
                                                               ],
@@ -453,24 +474,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             children: [
                                                               Row(
                                                                 children: [
-                                                                  Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                  SizedBox(width: 2,),
-                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].totalToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  const Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                  const SizedBox(width: 2,),
+                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].totalToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                 ],
                                                               ),
                                                               Row(
                                                                 children: [
-                                                                  Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                  SizedBox(width: 2,),
-                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].currentToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  const Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                  const SizedBox(width: 2,),
+                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].currentToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                 ],
                                                               ),
-                                                              SizedBox(height: 2,),
+                                                              const SizedBox(height: 2,),
                                                               Row(
                                                                 children: [
-                                                                  Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
-                                                                  SizedBox(width: 2,),
-                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].nextToken}",style: TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  const Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                  const SizedBox(width: 2,),
+                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].nextToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                 ],
                                                               ),
 
@@ -495,43 +516,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20,)
+                    const SizedBox(height: 20,)
                   ],
                 )
 
               ],
             );
           }),
-        ),
-      ),
     );
-  }
-
-  Widget sliderPointers (List doteList , int currentIndex ) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children:
-        doteList
-            .asMap()
-            .entries
-            .map((entry) {
-          return GestureDetector(
-            // onTap:()=> controller.carouselController.animateToPage(entry.key),
-            child: Container(
-              width: currentIndex == entry.key ? 8 : 8,
-              height: 8.0,
-              margin: const EdgeInsets.symmetric(
-                horizontal: 3.0,
-              ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: currentIndex == entry.key
-                      ? AppColors.primary
-                      : Colors.black
-              ),
-            ),
-          );
-        }).toList());
   }
   int _currentPost = 0;
    _buildDots() {
@@ -541,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
       for (int i = 0; i < getSliderModel!.sliderdata!.length; i++) {
         dots.add(
           Container(
-            margin: EdgeInsets.all(1.5),
+            margin: const EdgeInsets.all(1.5),
             width: 6,
             height: 6,
             decoration: BoxDecoration(
@@ -554,7 +546,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return dots;
   }
-
   GetSliderModel? getSliderModel;
   Future<void> getSlider() async {
     // isLoading.value = true;
@@ -567,9 +558,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (status == true) {
         getSliderModel = GetSliderModel.fromJson(getData);
       } else {
-        // Fluttertoast.showToast(msg: msg);
+        Fluttertoast.showToast(msg: msg);
       }
-      //isLoading.value = false;
     });
   }
 
@@ -586,6 +576,7 @@ class _HomeScreenState extends State<HomeScreen> {
       catNewId == null ? "" : 'counter_category': catNewId.toString(),
       cId!.isEmpty ? "" : 'counter_id': cId.toString(),
     });
+    print('______request.fields____${request.fields}_________');
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -602,6 +593,162 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
   }
+///////////////////////UserSite//////////////////
+////////////////////////Counter///////////
+counterUI(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CarouselSlider(
+                    items: getSliderModel?.sliderdata!
+                        .map(
+                          (item) => Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              "${item.sliderImage}",
+                                            ),
+                                            fit: BoxFit.fill)),
+                                  )
+                              ),
+                            ),
+                          ]),
+                    )
+                        .toList(),
+                    carouselController: carouselController,
+                    options: CarouselOptions(
+                        height: 150,
+                        scrollPhysics: const BouncingScrollPhysics(),
+                        autoPlay: true,
+                        aspectRatio: 1.8,
+                        viewportFraction: 1,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentPostCounter = index ;
+                          });
 
+                        })),
+                const SizedBox(height: 5),
+                   Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: _buildDotsCounter(),),
+                // sliderPointers (items , currentIndex),
+
+              ],),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionScreen()));
+                    },
+                    child: Container(
+                      height: 120,
+                decoration: BoxDecoration(
+                    borderRadius:BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          Color(0xFF00CCFF),
+                        ],
+                        begin: FractionalOffset(0.0, 1.0),
+                        end: FractionalOffset(1.0, 0.0),
+                        stops: [0.0, 1.1],
+                        tileMode: TileMode.clamp),
+                     ),
+                      child: Center(child: const Text("Subscription",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold,fontSize: 15),)),
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  InkWell(
+
+                   onTap: (){
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateTokenScreen()));
+                   },
+
+                      child: Container(
+                      height: 120,
+                      decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                              colors: [
+                                AppColors.primary,
+                                Color(0xFF00CCFF),
+                              ],
+                              begin: FractionalOffset(0.0, 1.0),
+                              end: FractionalOffset(1.0, 0.0),
+                              stops: [0.0, 1.1],
+                              tileMode: TileMode.clamp),
+                          borderRadius: BorderRadius.circular(10)
+
+                      ),
+                      child: Center(child: const Text("Create Token",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold,fontSize: 15),),),
+
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  Container(
+                    height: 120,
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                            colors: [
+                              AppColors.primary,
+                              Color(0xFF00CCFF),
+                            ],
+                            begin: FractionalOffset(0.0, 1.0),
+                            end: FractionalOffset(1.0, 0.0),
+                            stops: [0.0, 1.1],
+                            tileMode: TileMode.clamp),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Center(child: const Text("Booking",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold,fontSize: 15),)),
+
+                  ),
+
+
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+   }
+
+  int _currentPostCounter = 0;
+  _buildDotsCounter() {
+    List<Widget> dots = [];
+    if (getSliderModel == null) {
+    } else {
+      for (int i = 0; i < getSliderModel!.sliderdata!.length; i++) {
+        dots.add(
+          Container(
+            margin: const EdgeInsets.all(1.5),
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: _currentPost == i ?  AppColors.profileColor : AppColors.secondary,
+            ),
+          ),
+        );
+      }
+    }
+    return dots;
+  }
 
 }

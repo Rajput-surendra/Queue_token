@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:booknplay/Services/api_services/apiConstants.dart';
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:booknplay/Widgets/button.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,6 +53,11 @@ class _CounterScreenState extends State<CounterScreen> {
       ),
         backgroundColor: AppColors.whit,
         appBar: AppBar(
+          leading: InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+              child: Icon(Icons.arrow_back)),
           automaticallyImplyLeading: false,
 
           shape: const RoundedRectangleBorder(
@@ -60,7 +66,7 @@ class _CounterScreenState extends State<CounterScreen> {
             ),),
           toolbarHeight: 60,
           centerTitle: true,
-          title: Text("Booking Details",style: TextStyle(fontSize: 17),),
+          title: Text("Booking ",style: TextStyle(fontSize: 17),),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               borderRadius:   BorderRadius.only(
@@ -201,7 +207,7 @@ addBookingApi() async {
   var headers = {
     'Cookie': 'ci_session=8f48c8eae5ab612664fc312e9f4d8b6786d866ff'
   };
-  var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/add_booking'));
+  var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/add_booking'));
   request.fields.addAll({
     'counter_id': widget.cId.toString(),
     'token_id':widget.tokenId.toString(),
