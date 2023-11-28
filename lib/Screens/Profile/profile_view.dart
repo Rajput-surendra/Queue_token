@@ -1,23 +1,17 @@
 import 'dart:convert';
-
-import 'package:booknplay/Constants.dart';
 import 'package:booknplay/Routes/routes.dart';
 import 'package:booknplay/Screens/Auth_Views/Login/login_view.dart';
 import 'package:booknplay/Services/api_services/apiConstants.dart';
-
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:booknplay/Utils/custom_clip_path.dart';
-import 'package:booknplay/Widgets/commen_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
 import '../../Local_Storage/shared_pre.dart';
 import '../../Models/HomeModel/get_profile_model.dart';
-
 import 'package:http/http.dart'as http;
-
 import '../Subscription/purchage_plan_view.dart';
 import 'edit_profile.dart';
 class ProfileScreen extends StatefulWidget {
@@ -32,13 +26,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isEditProfile = false ;
 @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     referCode();
   }
-  String? mobile,userId,userName,userBalance;
+  String? mobile,userId,userName,userBalance,userRole;
   referCode() async {
     mobile = await SharedPre.getStringValue('userMobile');
+    userRole = await SharedPre.getStringValue('userRole');
     userName = await SharedPre.getStringValue('userData');
     userId = await SharedPre.getStringValue('userId');
     userBalance = await SharedPre.getStringValue('balanceUser');
@@ -83,16 +77,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
   Widget bodyWidget(BuildContext context, ) {
-    return RefreshIndicator(
+    return getProfileModel == null || getProfileModel == " " ? const Center(child: CircularProgressIndicator()):  RefreshIndicator(
       onRefresh: () {
-        return Future.delayed(Duration(seconds: 2),(){
+        return Future.delayed(const Duration(seconds: 2),(){
           get();
         });
       },
       child: ListView.builder(
         itemCount: 1,
           itemBuilder: (context,i){
-        return  getProfileModel == null || getProfileModel == " " ? Center(child: CircularProgressIndicator()): SingleChildScrollView(
+        return   SingleChildScrollView(
           child: Column(
             children: [
               Stack(
@@ -130,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       top: MediaQuery.sizeOf(context).height / 25,
                       right: MediaQuery.sizeOf(context).width / 4,
                       left: MediaQuery.sizeOf(context).width / 2.9,
-                      child:Text("My Account",style: TextStyle(color: AppColors.whit,fontSize: 20,fontWeight: FontWeight.bold),) ),
+                      child:const Text("My Account",style: TextStyle(color: AppColors.whit,fontSize: 20,fontWeight: FontWeight.bold),) ),
                   Positioned(
                     top: MediaQuery.sizeOf(context).height / 11,
                     right: MediaQuery.sizeOf(context).width / 3,
@@ -156,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
               Padding(
-                padding:  EdgeInsets.all(8.0),
+                padding:  const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -166,8 +160,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfileScreen(getProfileModel: getProfileModel,)));
                       },
-                        child: Text("Edit Profile",style: TextStyle(color: AppColors.secondary,fontSize: 15,fontWeight: FontWeight.bold),))),
-                    SizedBox(height: 15,),
+                        child: const Text("Edit Profile",style: TextStyle(color: AppColors.secondary,fontSize: 15,fontWeight: FontWeight.bold),))),
+                    const SizedBox(height: 15,),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     //   children: [
@@ -303,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //   ),
                     // ),
                     // SizedBox(height: 10,),
-                    InkWell(
+                    userRole == "user"? const SizedBox.shrink():  InkWell(
                       onTap: (){
                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPlanListScreen()));
                       },
@@ -314,115 +308,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: AppColors.fntClr)
                         ),
                         child:  Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
-                                  Image.asset("assets/images/My Invitation.png",height: 20,color: AppColors.profileColor,),
-                                  SizedBox(width: 10,),
-                                  Text("My Plan",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                  Image.asset("assets/images/My Invitation.png",height: 20,color: AppColors.secondary,),
+                                  const SizedBox(width: 10,),
+                                  const Text("My Plan",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                              const Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
                             ],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    // SizedBox(height: 10,),
-                    // InkWell(
-                    //   onTap: (){
-                    //     Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionScreen()));
-                    //   },
-                    //   child: Container(
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(7),
-                    //         border: Border.all(color: AppColors.fntClr)
-                    //     ),
-                    //     child:  Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Row(
-                    //             children: [
-                    //               Image.asset("assets/images/My Transaction.png",height: 20,color: AppColors.profileColor,),
-                    //               SizedBox(width: 10,),
-                    //               Text("My Transaction",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
-                    //             ],
-                    //           ),
-                    //           Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 10,),
-                    //
-                    // InkWell(
-                    //   onTap: (){
-                    //     Get.toNamed(notice);
-                    //
-                    //   },
-                    //   child: Container(
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(7),
-                    //         border: Border.all(color: AppColors.fntClr)
-                    //     ),
-                    //     child:  Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Row(
-                    //             children: [
-                    //               Image.asset("assets/images/notification.png",height: 20,color: AppColors.profileColor,),
-                    //               SizedBox(width: 10,),
-                    //               Text("Notices",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
-                    //             ],
-                    //           ),
-                    //           Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 10,),
-                    // InkWell(
-                    //   onTap: (){
-                    //     Get.toNamed(video);
-                    //
-                    //   },
-                    //   child: Container(
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(7),
-                    //         border: Border.all(color: AppColors.fntClr)
-                    //     ),
-                    //     child:  Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Row(
-                    //             children: [
-                    //               Image.asset("assets/images/How to Play.png",height: 20,color: AppColors.profileColor,),
-                    //               SizedBox(width: 10,),
-                    //               Text("How to Play",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
-                    //             ],
-                    //           ),
-                    //           Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
+
                     InkWell(
                       onTap: (){
                         Get.toNamed(contact);
@@ -434,57 +338,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: AppColors.fntClr)
                         ),
                         child:  Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
-                                  Image.asset("assets/images/Contact Us.png",height: 20,color: AppColors.profileColor,),
-                                  SizedBox(width: 10,),
-                                  Text("Contact Us",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                  Image.asset("assets/images/Contact Us.png",height: 20,color: AppColors.secondary,),
+                                  const SizedBox(width: 10,),
+                                  const Text("Contact Us",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                              const Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
                             ],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    // InkWell(
-                    //   onTap: (){
-                    //     Get.toNamed(enquiry);
-                    //   },
-                    //   child: Container(
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(7),
-                    //         border: Border.all(color: AppColors.fntClr)
-                    //     ),
-                    //     child:  Padding(
-                    //       padding: EdgeInsets.all(8.0),
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Row(
-                    //             children: [
-                    //               Image.asset("assets/images/Enquiry.png",height: 20,color: AppColors.profileColor,),
-                    //               SizedBox(width: 10,),
-                    //               Text("Enquiry",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
-                    //             ],
-                    //           ),
-                    //           Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
+
                     InkWell(
                       onTap: (){
-                        Get.toNamed(inviteFriend);
-
+                        Fluttertoast.showToast(msg: "After Live",backgroundColor: AppColors.secondary);
+                       // Get.toNamed(inviteFriend);
                       },
                       child: Container(
                         height: 50,
@@ -493,24 +369,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: AppColors.fntClr)
                         ),
                         child:  Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
-                                  Image.asset("assets/images/rate app.png",height: 20,color: AppColors.profileColor,),
-                                  SizedBox(width: 10,),
-                                  Text("Rate App",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                  Image.asset("assets/images/rate app.png",height: 20,color: AppColors.secondary,),
+                                  const SizedBox(width: 10,),
+                                  const Text("Rate App",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                              const Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
                             ],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
+                    InkWell(
+                      onTap: (){
+                        Get.toNamed(faq);
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            border: Border.all(color: AppColors.fntClr)
+                        ),
+                        child:  Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset("assets/images/FAQ.png",height: 20,color: AppColors.secondary,),
+                                  const SizedBox(width: 10,),
+                                  const Text("FAQs",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                              const Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
                     InkWell(
                       onTap: (){
                         Get.toNamed(privacyScreen);
@@ -523,24 +428,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: AppColors.fntClr)
                         ),
                         child:  Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
-                                  Image.asset("assets/images/Privacy Policy.png",height: 20,color: AppColors.profileColor,),
-                                  SizedBox(width: 10,),
-                                  Text("Privacy Policy",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                  Image.asset("assets/images/Privacy Policy.png",height: 20,color: AppColors.secondary,),
+                                  const SizedBox(width: 10,),
+                                  const Text("Privacy Policy",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                              const Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
                             ],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     InkWell(
                       onTap: (){
                         Get.toNamed(termConditionScreen);
@@ -553,63 +458,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: AppColors.fntClr)
                         ),
                         child:  Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
-                                  Image.asset("assets/images/Terms & Conditions.png",height: 20,color: AppColors.profileColor,),
-                                  SizedBox(width: 10,),
-                                  Text("Terms and Conditions",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                  Image.asset("assets/images/Terms & Conditions.png",height: 20,color: AppColors.secondary,),
+                                  const SizedBox(width: 10,),
+                                  const Text("Terms and Conditions",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
+                              const Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
                             ],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    InkWell(
-                      onTap: (){
-                        Get.toNamed(faq);
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7),
-                            border: Border.all(color: AppColors.fntClr)
-                        ),
-                        child:  Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset("assets/images/FAQ.png",height: 20,color: AppColors.profileColor,),
-                                  SizedBox(width: 10,),
-                                  Text("FAQs",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios_outlined,color: AppColors.greyColor,size: 17,)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
+
                     InkWell(
                       onTap: (){
                         showDialog(
                           context: context,
                           builder: (context) {
-                            String contentText = "LogOut";
+                            String contentText = "";
                             return StatefulBuilder(
                               builder: (context, setState) {
                                 return AlertDialog(
-                                  title: const Text("Are you sure you want  to ? LogOut"),
+                                  title: const Text("Are you sure you want to Logout"),
                                   content: Text(contentText),
                                   actions: <Widget>[
                                     TextButton(
@@ -619,8 +496,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     TextButton(
                                       onPressed: () async{
                                         await SharedPre.clear('userId');
-                                        await Future.delayed(const Duration(seconds: 1));
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                                        await Future.delayed(const Duration(milliseconds: 500));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
                                         setState(()  {
 
                                           //Get.toNamed(loginScreen);
@@ -644,7 +521,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius: BorderRadius.circular(7),
 
                           ),
-                          child:  Padding(
+                          child:  const Padding(
                             padding: EdgeInsets.all(8.0),
                             child:  Center(child: Text("Logout",style: TextStyle(color: AppColors.whit,fontWeight: FontWeight.bold),)),
                           ),
@@ -661,20 +538,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-// Function to execute when the user confirms logout
   Widget logOut(context){
     return AlertDialog(
-      title: Text('Confirm Logout'),
-      content: Text('Are you sure you want to log out?'),
+      title: const Text('Confirm Logout'),
+      content: const Text('Are you sure you want to log out?'),
       actions: <Widget>[
         TextButton(
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Logout'),
+          child: const Text('Logout'),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -721,12 +597,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(
                 height: 10,
               ),
               Text(data,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: AppColors.greyColor,
                       fontSize: 16,
                       fontWeight: FontWeight.bold)),
@@ -784,4 +660,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //     ),
   //   );
   // }
+
 }

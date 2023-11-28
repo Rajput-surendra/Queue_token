@@ -9,6 +9,8 @@ final Uri getSliderAPI = Uri.parse('${baseUrl}api-get-slider-images');
 final Uri getPrivacyAPI = Uri.parse('${baseUrl}Apicontroller/apiGetContent');
 final Uri getMyBookingAPI = Uri.parse('${baseUrl}Apicontroller/my_booking');
 final Uri getSubscriptionsAPI = Uri.parse('${baseUrl}Apicontroller/subscriptions');
+final Uri getFagsAPI = Uri.parse('${baseUrl}Apicontroller/getFaqs');
+ final Uri getContactAPI = Uri.parse('${baseUrl}Apicontroller/apiGetContactDetails');
 
 
 

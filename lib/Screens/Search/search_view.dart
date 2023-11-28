@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:booknplay/Constants.dart';
+import 'package:booknplay/Screens/Dashboard/dashbord_counter_view.dart';
 import 'package:booknplay/Utils/Colors.dart';
 import 'package:booknplay/Utils/custom_clip_path.dart';
 import 'package:booknplay/Widgets/app_button.dart';
@@ -13,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../Local_Storage/shared_pre.dart';
 import '../../Models/HomeModel/signUp_cat_model.dart';
 import '../../Services/api_services/apiConstants.dart';
 import '../../Services/api_services/apiStrings.dart';
@@ -37,8 +39,15 @@ class _SearchScreenState extends State<SearchScreen> {
     // TODO: implement initState
     super.initState();
     getCateApi();
+    referCode();
   }
+  String? userRole;
+  referCode() async {
+    userRole = await SharedPre.getStringValue('userRole');
+    setState(() {
 
+    });
+  }
   final nameController = TextEditingController();
   final cityController = TextEditingController();
   final counterIdController = TextEditingController();
@@ -49,7 +58,12 @@ class _SearchScreenState extends State<SearchScreen> {
         appBar: AppBar(
           leading: InkWell(
             onTap: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
+              if(userRole == 'user'){
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
+              }else{
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardCounterScreen()));
+              }
+
             },
               child: Icon(Icons.arrow_back)),
           automaticallyImplyLeading: false,
@@ -220,7 +234,7 @@ class _SearchScreenState extends State<SearchScreen> {
   var headers = {
     'Cookie': 'ci_session=052f7198d39c07d7c57fb2fed6a242b3b8aaa2de'
   };
-  var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/counters'));
+  var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/counters'));
   request.fields.addAll({
     nameController.text.isEmpty ? "" :  'counter_name':nameController.text,
     cityController.text.isEmpty? "": 'counter_city':cityController.text,
@@ -241,7 +255,12 @@ class _SearchScreenState extends State<SearchScreen> {
         cityName = cityController.text;
 
       });
-     Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoardScreen()));
+     if(userRole == 'user'){
+       Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
+     }else{
+       Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardCounterScreen()));
+     }
+
 
   }
   else {

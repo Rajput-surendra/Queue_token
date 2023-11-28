@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../../Local_Storage/shared_pre.dart';
 import '../../Models/HomeModel/signUp_cat_model.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,7 @@ import '../../Models/get_sub_plan_model.dart';
 import '../../Services/api_services/apiConstants.dart';
 import '../../Services/api_services/apiStrings.dart';
 import '../../Utils/extentions.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 
 class AddCreateTokenScreen extends StatefulWidget {
@@ -24,6 +26,8 @@ class AddCreateTokenScreen extends StatefulWidget {
 }
 
 class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -45,7 +49,12 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+         bottomSheet:AppButton1(
+   title: "Create Token",
+   onTap: (){
+     createToken();
+   },
+ ),
         backgroundColor: AppColors.whit,
         appBar: AppBar(
           leading: InkWell(
@@ -84,6 +93,8 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
               child: Column(
                 children: [
+
+                  SizedBox(height: 20),
                   Container(
                     height: 55,
                     child: Card(
@@ -103,7 +114,6 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
                             underline: Padding(
                               padding: const EdgeInsets.only(left: 0,right: 0),
                               child: Container(
-
                                 // height: 2,
                                 color:  AppColors.whit,
                               ),
@@ -145,66 +155,129 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: CustomBoxDecoration.myCustomDecoration(),
-                    child: TextFormField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                          hintText: "Name",
-                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
-                          border: InputBorder.none
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      width: double.maxFinite,
+                      height: 50,
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                      child: TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                            hintText: "Name",
+                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                            border: InputBorder.none
+                        ),
+                        style: const TextStyle(fontSize: 14),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return "Name cannot be empty";
+                          } else if (val.length < 4) {
+                            return "Please enter must 5 digit";
+                          }
+                        },
                       ),
-                      style: const TextStyle(fontSize: 14),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Name cannot be empty";
-                        } else if (val.length < 4) {
-                          return "Please enter must 5 digit";
-                        }
-                      },
                     ),
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: CustomBoxDecoration.myCustomDecoration(),
-                    child: TextFormField(
-                      controller: timeController,
-                      decoration: const InputDecoration(
-                          hintText: "Token Time ",
-                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
-                          border: InputBorder.none
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      width: double.maxFinite,
+                      height: 50,
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: timeController,
+                        decoration: const InputDecoration(
+                            hintText: "Token Time ",
+                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                            border: InputBorder.none
+                        ),
+                        style: const TextStyle(fontSize: 14),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return "Token cannot be empty";
+                          } else if (val.length < 4) {
+                            return "Please enter must 5 digit";
+                          }
+                        },
                       ),
-                      style: const TextStyle(fontSize: 14),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Token cannot be empty";
-                        } else if (val.length < 4) {
-                          return "Please enter must 5 digit";
-                        }
-                      },
                     ),
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                   AppButton1(
-                    title: "Create Token",
-                    onTap: (){
-                      createToken();
-                    },
-                  )
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("From Time",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                            const SizedBox(height: 5,),
+                            morningShift(),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("To Time",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                            const SizedBox(height: 5,),
+                            eveningShift(),
+                          ],
+                        )
+
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Card(
+                    elevation: 2,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        icon:  const Icon(Icons.keyboard_arrow_down_rounded,  color:AppColors.fntClr,size: 25,),
+                        hint:  const Text('Select Days',
+                          style: TextStyle(
+                              color: AppColors.fntClr,fontWeight: FontWeight.w500,fontSize:12
+                          ),),
+                        items: items
+                            .map((String item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.fntClr,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                            .toList(),
+                        value: selectedValue,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedValue = value;
+                          });
+                        },
+
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
-            )
-        ));
+            )));
   }
   String? catId;
   SignUpCat? animalCat;
@@ -244,13 +317,9 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
     else {
     print(response.reasonPhrase);
     }
-
   }
-  
-  
-  
-  
-  
+
+
   createToken() async {
     var headers = {
       'Cookie': 'ci_session=a3f6c3c57d246096cf641e253ca83fd18f2258a9'
@@ -260,15 +329,13 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
       'user_id':userId.toString(),
       'category': catId.toString(),
       'time_per_client':timeController.text,
-      'from_time': '10 am',
-      'to_time': '01 pm',
-      'user_name':nameController.text
+      'from_time':"${_selectedTime!.format(context)}",
+      'to_time':"${_selectedTime1!.format(context)}",
+      'user_name':nameController.text,
+      'date':selectedValue.toString(),
     });
-   print('_____request.fields_____${request.fields}_________');
     request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var result = await response.stream.bytesToString();
       var finalResult  = jsonDecode(result);
@@ -278,6 +345,91 @@ class _AddCreateTokenScreenState extends State<AddCreateTokenScreen> {
     else {
     print(response.reasonPhrase);
     }
+  }
+  TimeOfDay? _selectedTime ;
+  TimeOfDay? _selectedTime1;
+  Widget morningShift() {
+    return InkWell(
+      onTap: () {
+        _selectTime(context);
+      },
+      child: Container(
+        // Customize the container as needed
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              _selectedTime != null
+                  ? '${_selectedTime!.format(context)}'
+                  : 'From Time',
+            ),
+            Icon(Icons.arrow_drop_down),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget eveningShift() {
+    return  InkWell(
+      onTap: () {
+        _chooseTime(context);
+      },
+      child: Container(
+        // Customize the container as needed
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              _selectedTime1 != null
+                  ? '${_selectedTime1!.format(context)}'
+                  : 'To Time',
+            ),
+            Icon(Icons.arrow_drop_down),
+          ],
+        ),
+      ),
+    );
+  }
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    ) as TimeOfDay;
+
+    if (pickedTime != null && pickedTime != _selectedTime) {
+
+      setState(() {
+        _selectedTime = pickedTime;
+      });
+    }
 
   }
+  Future<void> _chooseTime(BuildContext context) async {
+    final TimeOfDay pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime1 ?? TimeOfDay.now(),
+    ) as TimeOfDay;
+
+    if (pickedTime != null && pickedTime != _selectedTime1) {
+      setState(() {
+        _selectedTime1 = pickedTime;
+      });
+    }
+  }
+
+  final List<String> items = [
+    'Today',
+    'Tomorrow',
+  ];
+  String? selectedValue;
 }

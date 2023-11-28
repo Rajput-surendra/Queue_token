@@ -14,8 +14,6 @@ import '../../Routes/routes.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
-
-
   @override
   Widget build(BuildContext context) {
     final heightSize = MediaQuery
@@ -52,7 +50,6 @@ class SplashScreen extends StatelessWidget {
 
         });
   }
-
   checkLogin() async {
     final isLogin2 = await SharedPre.getStringValue('userId');
     Future.delayed(const Duration(seconds: 1), () async {
@@ -63,7 +60,12 @@ class SplashScreen extends StatelessWidget {
          if(role == "user"){
            Get.offAllNamed(search);
          }else{
-           Get.offAllNamed(bottomBar);
+           if(role == "user"){
+             Get.offAllNamed(bottomBar);
+           }else{
+             Get.offAllNamed(bottomBar1);
+           }
+
          }
 
         //Get.offAllNamed(bottomBar);

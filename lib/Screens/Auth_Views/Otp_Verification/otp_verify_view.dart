@@ -49,7 +49,9 @@ class _Otp extends State<OTPVerificationScreen> {
                     const SizedBox(height: 30,),
                     const Text('Code has been sent to',style: TextStyle(color: AppColors.whit),),
                     Text(controller.data[0].toString(),style: const TextStyle(fontSize: 20,color: AppColors.whit),),
-                    Text('OTP: ${controller.data[1]}',style: const TextStyle(fontSize: 20,color: AppColors.whit),),
+                    controller.otp == "null" ?
+                    Text('OTP: ',style: const TextStyle(fontSize: 20,color: AppColors.whit),):
+                    Text('OTP: ${controller.otp}',style: const TextStyle(fontSize: 20,color: AppColors.whit),),
 
                     const SizedBox(height: 30,),
                     PinCodeTextField(
@@ -74,33 +76,11 @@ class _Otp extends State<OTPVerificationScreen> {
                       //pinBoxRadius:20,
                       appContext: context, length: 4 ,
                     ),
-                    // OtpTextField(
-                    //   numberOfFields: 4,
-                    //      borderRadius:  BorderRadius.all(Radius.circular(10)),
-                    //   //set to true to show as box or false to show as dash
-                    //   showFieldAsBox: true,
-                    //   fillColor: Colors.white,
-                    //   filled: ,
-                    //   onCodeChanged: (String code) {
-                    //
-                    //   },
-                    //   //runs when every textfield is filled
-                    //   onSubmit: (String verificationCode){
-                    //     showDialog(
-                    //         context: context,
-                    //         builder: (context){
-                    //           return AlertDialog(
-                    //             title: Text("Verification Code"),
-                    //             content: Text('Code entered is $verificationCode'),
-                    //           );
-                    //         }
-                    //     );
-                    //   }, // end onSubmit
-                    // ),
+
                     const SizedBox(height: 30,),
                     const Text("Haven't received the verification code?",style: TextStyle(color: AppColors.whit,fontSize: 16),),
                     InkWell(onTap: (){
-                     // controller.sendOtp();
+                     controller.resendSendOtp();
                     },
                         child: const Text('Resend',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: AppColors.whit),)),
                     const SizedBox(height: 70,),

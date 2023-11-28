@@ -40,6 +40,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
     });
   }
+  final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final mobileController = TextEditingController();
   @override
@@ -48,6 +49,7 @@ class _CounterScreenState extends State<CounterScreen> {
       bottomSheet:   AppButton1(
         title: "Add Booking",
         onTap: (){
+          if(_formKey.currentState! .validate())
           addBookingApi();
         },
       ),
@@ -83,120 +85,123 @@ class _CounterScreenState extends State<CounterScreen> {
             height: MediaQuery.of(context).size.height/1.2,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                      Card(
-                        child: Column(
-                          children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                               Row(
-                                 children: [
-                                   Text("Time:"),
-                                   Row(
-                                     children: [
-                                       Text("${widget.fTime}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr)),
-                                       SizedBox(width: 5,),
-                                       Text("to ${widget.toTime}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr)),
-                                     ],
-                                   ),
-                                 ],
-                               ),
-                               Row(
-                                 children: [
-                                   Text("Date:"),
-                                   Text("${widget.date}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr),),
-                                 ],
-                               )
-                              ],
-                            ),
-                          ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                        Card(
+                          child: Column(
+                            children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Text("Total Token:"),
-                                      Row(
-                                        children: [
-                                          Text(" ${widget.tTotal}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  // Row(
-                                  //   children: [
-                                  //     Text("Date:"),
-                                  //     Text("${widget.date}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr),),
-                                  //   ],
-                                  // )
+                                 Row(
+                                   children: [
+                                     Text("Time:"),
+                                     Row(
+                                       children: [
+                                         Text("${widget.fTime}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr)),
+                                         SizedBox(width: 5,),
+                                         Text("to ${widget.toTime}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr)),
+                                       ],
+                                     ),
+                                   ],
+                                 ),
+                                 Row(
+                                   children: [
+                                     Text("Date:"),
+                                     Text("${widget.date}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr),),
+                                   ],
+                                 )
                                 ],
                               ),
-                            )
+                            ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text("Total Token:"),
+                                        Row(
+                                          children: [
+                                            Text(" ${widget.tTotal}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Text("Date:"),
+                                    //     Text("${widget.date}",style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.fntClr),),
+                                    //   ],
+                                    // )
+                                  ],
+                                ),
+                              )
 
-                          ],
+                            ],
+                          ),
                         ),
+                    SizedBox(height: 20,),
+                    Container(
+                      width: double.maxFinite,
+                      height: 50,
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                      child: TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                            hintText: "Enter Name",
+                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                            border: InputBorder.none
+                        ),
+                        style: const TextStyle(fontSize: 14),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return "Please enter name";
+                          } else if (val.length < 5) {
+                            return "Please enter must 5 digit";
+                          }
+                        },
                       ),
-                  SizedBox(height: 20,),
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: CustomBoxDecoration.myCustomDecoration(),
-                    child: TextFormField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                          hintText: "Enter Name",
-                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
-                          border: InputBorder.none
-                      ),
-                      style: const TextStyle(fontSize: 14),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Name cannot be empty";
-                        } else if (val.length < 5) {
-                          return "Please enter must 5 digit";
-                        }
-                      },
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: CustomBoxDecoration.myCustomDecoration(),
-                    child: TextFormField(
-                      maxLength: 10,
-                      keyboardType: TextInputType.number,
-                      controller: mobileController,
-                      decoration: const InputDecoration(
-                          counterText: "",
-                          hintText: "Mobile Number",
-                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
-                          // prefixIcon: Icon(Icons.call),
-                          border: InputBorder.none
-                      ),
-                      style: const TextStyle(fontSize: 14),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Mobile cannot be empty";
-                        } else if (val.length < 10) {
-                          return "Please enter mobile must 10 digit";
-                        }
-                      },
+                    const SizedBox(
+                      height: 15,
                     ),
-                  ),
-                 SizedBox(height: 50,),
+                    Container(
+                      width: double.maxFinite,
+                      height: 50,
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: CustomBoxDecoration.myCustomDecoration(),
+                      child: TextFormField(
+                        maxLength: 10,
+                        keyboardType: TextInputType.number,
+                        controller: mobileController,
+                        decoration: const InputDecoration(
+                            counterText: "",
+                            hintText: "Mobile Number",
+                            contentPadding: EdgeInsets.only(left: 10,bottom: 5),
+                            // prefixIcon: Icon(Icons.call),
+                            border: InputBorder.none
+                        ),
+                        style: const TextStyle(fontSize: 14),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return "Please enter mobile number";
+                          } else if (val.length < 10) {
+                            return "Please enter mobile must 10 digit";
+                          }
+                        },
+                      ),
+                    ),
+                   SizedBox(height: 50,),
 
-                ],
+                  ],
+                ),
               ),
             )
           )
@@ -209,13 +214,13 @@ addBookingApi() async {
   };
   var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/add_booking'));
   request.fields.addAll({
-    'counter_id': widget.cId.toString(),
+    'counter_id':widget.cId.toString(),
     'token_id':widget.tokenId.toString(),
     'user_id':userId.toString(),
     'name':nameController.text,
     'mobile':mobileController.text
   });
-  print('_____request.fields_____${request.fields}_________');
+  print("1111111111111111111111${request.fields}");
   request.headers.addAll(headers);
 
   http.StreamedResponse response = await request.send();
@@ -223,7 +228,7 @@ addBookingApi() async {
   if (response.statusCode == 200) {
     var result = await response.stream.bytesToString();
     var finalResult =  jsonDecode(result);
-    Fluttertoast.showToast(msg: finalResult['message']);
+    Fluttertoast.showToast(msg: 'Token generate successfully');
     Navigator.pop(context);
   }
   else {

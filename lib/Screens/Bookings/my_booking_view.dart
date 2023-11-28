@@ -63,7 +63,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
       ),
       body:  SingleChildScrollView(
         child:Container(
-          child:getTokenListModel == null ? Center(child: CircularProgressIndicator()): getTokenListModel!.data!.length == "0" ?  Text("data"):ListView.builder(
+          child:getTokenListModel == null ? Center(child: CircularProgressIndicator()): getTokenListModel!.data!.length == 0 ?  Center(child: Text("No Token List Found!!")):ListView.builder(
               itemCount:getTokenListModel!.data!.length ,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -202,11 +202,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
     var headers = {
       'Cookie': 'ci_session=54b75d7a8d31a31e8269c4131f4e43bd2f9eabf2'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/my_booking'));
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/my_booking'));
     request.fields.addAll({
-      'user_id': '72'
+      'user_id':userId.toString()
     });
-
+   print('____request.fields______${request.fields}_________');
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
 

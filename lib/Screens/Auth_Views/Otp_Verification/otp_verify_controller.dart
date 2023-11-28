@@ -17,6 +17,8 @@ class OTPVerifyController extends AppBaseController{
     // TODO: implement onInit
     super.onInit();
       data = Get.arguments ;
+    otp=data[1].toString();
+
   }
 
 RxBool isLoading = false.obs ;
@@ -34,7 +36,6 @@ RxBool isLoading = false.obs ;
       bool status = getData['status'];
       String msg = getData['msg'];
        role = getData['role'];
-      print('_____role_____${role}_________');
       if (status) {
         SharedPre.setValue('userData', getData['user_name']);
         SharedPre.setValue('userMobile', getData['mobile']);
@@ -52,6 +53,25 @@ RxBool isLoading = false.obs ;
         Fluttertoast.showToast(msg: msg);
       }
       isLoading.value = false ;
+    });
+  }
+
+  Future<void> resendSendOtp() async {
+    update();
+    var param = {
+      'mobile': data[0].toString(),
+      'app_key':"#63Y@#)KLO57991(\$457D9(JE4dY3d2250f\$%#(mhgamesapp!xyz!punjablottery)8fm834(HKU8)5grefgr48mg1"
+    };
+    apiBaseHelper.postAPICall(sendOTPAPI, param).then((getData) {
+      bool status = getData['status'];
+      String msg = getData['msg'];
+       otp = getData['otp'].toString();
+       update();
+      if (status) {
+        Fluttertoast.showToast(msg: msg);
+        update();
+      } else {
+      }
     });
   }
 }

@@ -14,14 +14,14 @@ import '../../Local_Storage/shared_pre.dart';
 import '../Bookings/my_booking_view.dart';
 import '../Home/home_view.dart';
 import '../Profile/profile_view.dart';
-class DashBoardScreen extends StatefulWidget {
-  DashBoardScreen({Key? key,this.nameC,this.cityC,this.catId,this.counterId}) : super(key: key);
+class DashBoardCounterScreen extends StatefulWidget {
+  DashBoardCounterScreen({Key? key,this.nameC,this.cityC,this.catId,this.counterId}) : super(key: key);
   String? nameC,cityC,catId,counterId;
   @override
-  State<DashBoardScreen> createState() => _DashBoardScreenState();
+  State<DashBoardCounterScreen> createState() => _DashBoardCounterScreenState();
 }
 
-class _DashBoardScreenState extends State<DashBoardScreen> {
+class _DashBoardCounterScreenState extends State<DashBoardCounterScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   //final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -30,10 +30,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   String? userRole;
   List <Widget>
   pageList  = [
-
     HomeScreen(),
-    // ResultScreen(),
-      MyBookingsScreen(isFrom: false),
     ProfileScreen()
   ];
 
@@ -86,7 +83,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         return exit ?? false; // Exit if the user confirmed (true) or continue if canceled (false).
       },
       child: Scaffold(
-                bottomNavigationBar: CurvedNavigationBar(
+          bottomNavigationBar: CurvedNavigationBar(
             //buttonBackgroundColor: Colors.white,
             color: AppColors.secondary,
             backgroundColor: AppColors.whit,
@@ -97,13 +94,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   label: 'Home',
                   labelStyle: TextStyle(color: AppColors.whit)
               ),
-             
-              CurvedNavigationBarItem(
-                  child: ImageIcon(AssetImage(AppConstants.myLotteryIcon),
-                      color: AppColors.whit),
-                  label: 'My Token',
-                  labelStyle: TextStyle(color: AppColors.whit)
-              ),
+
               CurvedNavigationBarItem(
                   child: ImageIcon(AssetImage(AppConstants.profileIcon),
                       color: AppColors.whit),
@@ -119,11 +110,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               //Handle button tap
             },
           ),
-              key: _key,
-              backgroundColor: AppColors.whit,
-              body: pageList[bottomIndex]
+          key: _key,
+          backgroundColor: AppColors.whit,
+          body: pageList[bottomIndex]
 
-            ),
+      ),
     );
   }
 }

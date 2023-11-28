@@ -7,6 +7,7 @@ import 'package:booknplay/Screens/Auth_Views/Signup/signup_view.dart';
 import 'package:booknplay/Screens/Bookings/my_booking_view.dart';
 import 'package:booknplay/Screens/ChnagePassword/chnage_password_view.dart';
 import 'package:booknplay/Screens/Dashboard/dashboard_view.dart';
+import 'package:booknplay/Screens/Dashboard/dashbord_counter_view.dart';
 import 'package:booknplay/Screens/Home/home_view.dart';
 import 'package:booknplay/Screens/Privacy_Policy/privacy_view.dart';
 import 'package:booknplay/Screens/Profile/profile_view.dart';
@@ -14,6 +15,9 @@ import 'package:booknplay/Screens/Search/search_view.dart';
 import 'package:booknplay/Screens/Splash/splash_screen.dart';
 import 'package:booknplay/Screens/Terms_Condition/terms_condition_view.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
+
+import '../Screens/ContactUs/contactUs_View.dart';
+import '../Screens/FaQ/faq_view.dart';
 
 class AllPages {
   static List<GetPage> getPages() {
@@ -43,6 +47,10 @@ class AllPages {
           page: () =>  DashBoardScreen(),
           binding: ScreenBindings()),
       GetPage(
+          name: bottomBar1,
+          page: () =>  DashBoardCounterScreen(),
+          binding: ScreenBindings()),
+      GetPage(
           name: homeScreen,
           page: () =>  HomeScreen(),
           binding: ScreenBindings()),
@@ -67,11 +75,17 @@ class AllPages {
           page: () =>  ProfileScreen(),
           binding: ScreenBindings()),
 
-
-
-            GetPage(
+      GetPage(
           name: search,
           page: () => const SearchScreen(),
+          binding: ScreenBindings()),
+      GetPage(
+          name: faq,
+          page: () => const FaqScreen(),
+          binding: ScreenBindings()),
+      GetPage(
+          name: contact,
+          page: () => const ContactUsScreen(),
           binding: ScreenBindings()),
 
     ];

@@ -16,7 +16,7 @@ class LoginController extends AppBaseController {
   String login = 'Email';
   int num = 0;
 
-  RxBool isLoading = false.obs;
+  bool isLoading = false;
 
   User? userData;
 
@@ -81,7 +81,7 @@ class LoginController extends AppBaseController {
 
   Future<void> sendOtp({required String mobile}) async {
     update();
-    isLoading.value = true;
+    isLoading= true;
 
     var param = {
       'mobile': mobile,
@@ -96,37 +96,13 @@ class LoginController extends AppBaseController {
 
         Get.toNamed(otpScreen, arguments: [mobile, otp]);
         update();
-        isLoading.value = false;
+        isLoading = false;
       } else {
         Fluttertoast.showToast(msg: msg);
       }
-      isLoading.value = false;
+      isLoading = false;
     });
   }
 
-  Future<void> resendSendOtp({required String mobile}) async {
-    update();
-    isLoading.value = true;
 
-    var param = {
-      'mobile': mobile,
-      'app_key':"#63Y@#)KLO57991(\$457D9(JE4dY3d2250f\$%#(mhgamesapp!xyz!punjablottery)8fm834(HKU8)5grefgr48mg1"
-    };
-    apiBaseHelper.postAPICall(sendOTPAPI, param).then((getData) {
-      bool status = getData['status'];
-      String msg = getData['msg'];
-      int otp = getData['otp'];
-      if (status) {
-        Fluttertoast.showToast(msg: msg);
-
-        Get.toNamed(otpScreen, arguments: [mobile, otp]);
-        update();
-        print('_____otp_____${otp}_________');
-        isLoading.value = false;
-      } else {
-        Fluttertoast.showToast(msg: msg);
-      }
-      isLoading.value = false;
-    });
-  }
 }

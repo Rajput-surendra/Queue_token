@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../Local_Storage/shared_pre.dart';
+import '../../Models/HomeModel/get_token_model.dart';
 import '../../Models/HomeModel/signUp_cat_model.dart';
 
 import 'package:http/http.dart' as http;
@@ -34,12 +35,14 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
   }
 
   String? userId;
-
   getUserId() async {
     userId = await SharedPre.getStringValue('userId');
+    setState(() {
+      getTokenApi();
 
-    setState(() {});
+    });
   }
+
 
   final nameController = TextEditingController();
   final mobileController = TextEditingController();
@@ -87,36 +90,172 @@ class _CreateTokenScreenState extends State<CreateTokenScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child:Column(
-              children: [
-                Text("data")
-              ],
+            child:Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:getTokenModel == null ? Center(child: CircularProgressIndicator()): Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10,),
+                  const Text(
+                    "Today's Token",
+                    style: TextStyle(
+                        color: AppColors.fntClr,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10,),
+                   Container(
+                    height: 110,
+                    // width: MediaQuery.of(context).size.width/1.2,
+                    child: getTokenModel?.todayTokens?.isEmpty ?? false ? Center(child: const Text("No Todays Tokens")):ListView.builder(
+                        itemCount: getTokenModel?.todayTokens?.length ?? 0,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context,i){
+                          return  Container(
+                            width: MediaQuery.of(context).size.width/1.1,
+                            child: Card(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Name:"),
+                                        Text(" ${getTokenModel?.todayTokens?[i].userName}",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("From Time:"),
+                                        Text(" ${getTokenModel?.todayTokens?[i].fromTime}",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("To Time:"),
+                                        Text(" ${getTokenModel?.todayTokens?[i].toTime}",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Token Time:"),
+                                        Text(" ${getTokenModel?.todayTokens?[i].timePerClient} minutes ",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                  SizedBox(height: 20,),
+                  const Text(
+                    "Tomorrow Token",
+                    style: TextStyle(
+                        color: AppColors.fntClr,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10,),
+                  Container(
+                     width: MediaQuery.of(context).size.width/1.1,
+                    child:getTokenModel?.tomorrowTokens?.isEmpty ?? false ? Center(child: const Text("No Tomorrow Tokens")): ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: getTokenModel?.tomorrowTokens?.length ?? 0,
+                        itemBuilder: (context,i){
+                          return  Container(
+                            width: MediaQuery.of(context).size.width/1.2,
+                            child: Card(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Name:"),
+                                        Text(" ${getTokenModel?.tomorrowTokens?[i].userName}",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("From Time:"),
+                                        Text(" ${getTokenModel?.tomorrowTokens?[i].fromTime}",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("To Time:"),
+                                        Text(" ${getTokenModel?.tomorrowTokens?[i].toTime}",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Token Time:"),
+                                        Text(" ${getTokenModel?.tomorrowTokens?[i].timePerClient} minutes ",style: TextStyle(color: AppColors.fntClr,fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  )
+                ],
+              ),
             )
         ));
   }
 
-  GetSubscriptionModel? getSubscriptionModel;
-  addSubPlan(String pId) async {
-    var headers = {
-      'Cookie': 'ci_session=3c92729c33e9e6a6b76655065e1d039d1143a7a9'
-    };
-    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/add_subscription'));
 
+  GetTokenModel? getTokenModel;
+  getTokenApi() async {
+    var headers = {
+      'Cookie': 'ci_session=052f7198d39c07d7c57fb2fed6a242b3b8aaa2de'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/counter_tokens'));
     request.fields.addAll({
-      'user_id': userId.toString(),
-      'plan_id':pId,
+      'user_id':userId.toString()
     });
-    print('_____request.fields_____${request.fields}_________');
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-      var  result = await response.stream.bytesToString();
-      var finalResult = jsonDecode(result);
-      Fluttertoast.showToast(msg: "${finalResult['message']}");
-      Navigator.pop(context);
+      var result =  await response.stream.bytesToString();
+      var finalResult  = GetTokenModel.fromJson(jsonDecode(result));
+      setState(() {
+        getTokenModel =  finalResult;
+
+      });
+      Fluttertoast.showToast(msg: "${finalResult.message}");
+
     }
     else {
-    print(response.reasonPhrase);
+      print(response.reasonPhrase);
     }
 
   }

@@ -239,14 +239,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                    child: TextFormField(
                                      controller: nameController,
                                      decoration: const InputDecoration(
-                                         hintText: "Company Name",
+                                         hintText: "Name",
                                          contentPadding: EdgeInsets.only(left: 10,bottom: 5),
                                          border: InputBorder.none
                                      ),
                                      style: const TextStyle(fontSize: 14),
                                      validator: (val) {
                                        if (val!.isEmpty) {
-                                         return "Company name cannot be empty";
+                                         return "name cannot be empty";
                                        } else if (val.length < 5) {
                                          return "Please enter must 5 digit";
                                        }

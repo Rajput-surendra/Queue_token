@@ -52,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     });
   }
+
+
   final CarouselController carouselController = CarouselController();
   @override
   Widget build(BuildContext context) {
@@ -68,11 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
           toolbarHeight: 60,
           title: const Text("QUEUE TOKEN",style: TextStyle(fontSize: 17),),
           actions: [
-            InkWell(onTap: (){
+            userRole == 'user' ?  InkWell(onTap: (){
               Navigator.pop(context);
 
             },
-                child: const Icon(Icons.search)),
+                child: const Icon(Icons.search)):SizedBox.shrink(),
             const SizedBox(width: 15,),
             Padding(
               padding: const EdgeInsets.only(right: 10
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
-        body: userRole == "user" ? userUI() :counterUI()
+        body:getSliderModel == null ? Center(child: CircularProgressIndicator()): userRole == "user" ? userUI() :counterUI()
       ),
     );
   }
@@ -207,9 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Container(
                                 height: 110,
-                                child:getCounterModel == null ?const Center(child: CircularProgressIndicator()): ListView.builder(
+                                child:getCounterModel?.todaysTokens!.isEmpty ?? false ? Center(child: Text("No Today Token")): ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount:getCounterModel!.todaysTokens![0].todayTokens!.length ,
+                                    itemCount:getCounterModel?.todaysTokens?[0].todayTokens?.length ?? 0,
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                         onTap: (){
@@ -221,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             toTime: getCounterModel!.todaysTokens![0].todayTokens![index].toTime,
                                             tTotal: getCounterModel!.todaysTokens![0].todayTokens![index].totalToken,)));
                                         },
-                                        child: getCounterModel!.todaysTokens![0].todayTokens!.length == 0 ? const Text("fddfgfdfgfd"):Padding(
+                                        child: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Container(
                                               height: 100,
@@ -374,8 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Get.toNamed(winnerScreen);
                             },
                             child: Container(
-                              child:getCounterModel == null ? const Center(child: CircularProgressIndicator()): getCounterModel!.upcomingTokens![0].nextDayTokens!.length == "0" ?  const Text("data"):ListView.builder(
-                                  itemCount:getCounterModel!.upcomingTokens![0].nextDayTokens!.length ,
+                              child: getCounterModel?.upcomingTokens?.isEmpty ?? false ? Center(child: const Text("No UpcomingTokens")):ListView.builder(
+                                  itemCount:getCounterModel?.upcomingTokens?[0].nextDayTokens?.length  ?? 0,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
@@ -386,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: getCounterModel!.upcomingTokens! == "" ? const Text("Not Tood") : Container(
+                                        child:  Container(
                                             height: 100,
                                             width: 280,
                                             decoration: const BoxDecoration(
@@ -557,6 +559,9 @@ class _HomeScreenState extends State<HomeScreen> {
       String msg = getData['msg'];
       if (status == true) {
         getSliderModel = GetSliderModel.fromJson(getData);
+        setState(() {
+
+        });
       } else {
         Fluttertoast.showToast(msg: msg);
       }
@@ -569,14 +574,13 @@ class _HomeScreenState extends State<HomeScreen> {
     var headers = {
       'Cookie': 'ci_session=052f7198d39c07d7c57fb2fed6a242b3b8aaa2de'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('https://developmentalphawizz.com/queue_token/Apicontroller/counters'));
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/counters'));
     request.fields.addAll({
       userName!.isEmpty ? "" : 'counter_name': userName.toString(),
       cityName!.isEmpty ? "" : 'counter_city': cityName.toString(),
       catNewId == null ? "" : 'counter_category': catNewId.toString(),
       cId!.isEmpty ? "" : 'counter_id': cId.toString(),
     });
-    print('______request.fields____${request.fields}_________');
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -584,6 +588,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var finalResult  = GetCounterModel.fromJson(jsonDecode(result));
       setState(() {
         getCounterModel =  finalResult;
+        print(getCounterModel);
       });
       Fluttertoast.showToast(msg: "${finalResult.message}");
 
