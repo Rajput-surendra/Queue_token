@@ -172,7 +172,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                               borderRadius: BorderRadius.circular(50),
                                               color: AppColors.secondary1,
                                             ),
-                                            child: Center(child: Text("${getTokenListModel!.data![index].tokenNumber}",style: TextStyle(color: AppColors.whit),)),
+                                            child: Center(child: Text("${getTokenListModel!.data![index].currentToken}",style: TextStyle(color: AppColors.whit),)),
                                           )
 
                                         ],

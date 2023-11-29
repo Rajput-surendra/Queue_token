@@ -1,7 +1,7 @@
 /// error : false
 /// message : "Counters Get Successfully"
-/// todays_tokens : [{"user_id":"56","compny_name":"Suru","mobile":"7855881255","role":"counter","address":"Vijay Nagar, Indore ","city":"Indore ","category":"1 ","today_tokens":[{"id":"2","user_name":"Surendra","counter_id":"56","category":"1","time_per_client":"5","from_time":"10 am","to_time":"11 am","total_token":"12","date":"2023-11-25","created_at":"2023-11-25 18:11:43","available_token":15,"current_token":10,"next_token":11}]}]
-/// upcoming_tokens : [{"user_id":"56","compny_name":"Suru","mobile":"7855881255","role":"counter","address":"Vijay Nagar, Indore ","city":"Indore ","category":"1 ","next_day_tokens":[{"id":"3","user_name":"Harish","counter_id":"56","category":"1","time_per_client":"5","from_time":"10 am","to_time":"11 am","total_token":"12","date":"2023-11-26","created_at":"2023-11-25 18:11:43","available_token":15,"current_token":10,"next_token":11},{"id":"4","user_name":"Som","counter_id":"56","category":"1","time_per_client":"5","from_time":"10 am","to_time":"11 am","total_token":"12","date":"2023-11-26","created_at":"2023-11-25 18:11:43","available_token":15,"current_token":10,"next_token":11}]}]
+/// todays_tokens : [{"id":"39","user_name":"Deva ","counter_id":"114","category":"1","time_per_client":"3","from_time":"12:49","to_time":"08:49","total_token":"80","date":"2023-11-29","created_at":"2023-11-28 23:49:49","available_token":"80","current_token":"10","next_token":"11","company_name":"Alphawizz "},{"id":"26","user_name":"Ravi","counter_id":"56","category":"1","time_per_client":"10","from_time":"10 am","to_time":"01 pm","total_token":"18","date":"2023-11-29","created_at":"2023-11-28 16:14:16","available_token":"18","current_token":"10","next_token":"11","company_name":"Suru"},{"id":"27","user_name":"Sr.Vishal","counter_id":"102","category":"1","time_per_client":"10","from_time":"5:00 pm","to_time":"7:30 pm","total_token":"15","date":"2023-11-29","created_at":"2023-11-28 16:14:16","available_token":"13","current_token":"10","next_token":"11","company_name":"gggggg"},{"id":"37","user_name":"Raja ","counter_id":"102","category":"1","time_per_client":"6","from_time":"8:05 PM","to_time":"10:05 PM","total_token":"20","date":"2023-11-29","created_at":"2023-11-28 18:59:25","available_token":"19","current_token":"10","next_token":"11","company_name":"gggggg"},{"id":"40","user_name":"dr.abhishek","counter_id":"115","category":"1","time_per_client":"10","from_time":"12:00 PM","to_time":"2:00 PM","total_token":"12","date":"2023-11-29","created_at":"2023-11-29 11:05:27","available_token":"12","current_token":"10","next_token":"11","company_name":"dr.abhinav"}]
+/// upcoming_tokens : [{"id":"41","user_name":"dr.abhishek","counter_id":"115","category":"0","time_per_client":"15","from_time":"12:00 PM","to_time":"2:00 PM","total_token":"8","date":"2023-11-30","created_at":"2023-11-29 11:06:00","available_token":"15","current_token":"10","next_token":"11","company_name":"dr.abhinav"}]
 
 class GetCounterModel {
   GetCounterModel({
@@ -64,146 +64,54 @@ GetCounterModel copyWith({  bool? error,
 
 }
 
-/// user_id : "56"
-/// compny_name : "Suru"
-/// mobile : "7855881255"
-/// role : "counter"
-/// address : "Vijay Nagar, Indore "
-/// city : "Indore "
-/// category : "1 "
-/// next_day_tokens : [{"id":"3","user_name":"Harish","counter_id":"56","category":"1","time_per_client":"5","from_time":"10 am","to_time":"11 am","total_token":"12","date":"2023-11-26","created_at":"2023-11-25 18:11:43","available_token":15,"current_token":10,"next_token":11},{"id":"4","user_name":"Som","counter_id":"56","category":"1","time_per_client":"5","from_time":"10 am","to_time":"11 am","total_token":"12","date":"2023-11-26","created_at":"2023-11-25 18:11:43","available_token":15,"current_token":10,"next_token":11}]
+/// id : "41"
+/// user_name : "dr.abhishek"
+/// counter_id : "115"
+/// category : "0"
+/// time_per_client : "15"
+/// from_time : "12:00 PM"
+/// to_time : "2:00 PM"
+/// total_token : "8"
+/// date : "2023-11-30"
+/// created_at : "2023-11-29 11:06:00"
+/// available_token : "15"
+/// current_token : "10"
+/// next_token : "11"
+/// company_name : "dr.abhinav"
 
 class UpcomingTokens {
   UpcomingTokens({
-      String? userId, 
-      String? compnyName, 
-      String? mobile, 
-      String? role, 
-      String? address, 
-      String? city, 
+      String? id, 
+      String? userName, 
+      String? counterId, 
       String? category, 
-      List<NextDayTokens>? nextDayTokens,}){
-    _userId = userId;
-    _compnyName = compnyName;
-    _mobile = mobile;
-    _role = role;
-    _address = address;
-    _city = city;
+      String? timePerClient, 
+      String? fromTime, 
+      String? toTime, 
+      String? totalToken, 
+      String? date, 
+      String? createdAt, 
+      String? availableToken, 
+      String? currentToken, 
+      String? nextToken, 
+      String? companyName,}){
+    _id = id;
+    _userName = userName;
+    _counterId = counterId;
     _category = category;
-    _nextDayTokens = nextDayTokens;
+    _timePerClient = timePerClient;
+    _fromTime = fromTime;
+    _toTime = toTime;
+    _totalToken = totalToken;
+    _date = date;
+    _createdAt = createdAt;
+    _availableToken = availableToken;
+    _currentToken = currentToken;
+    _nextToken = nextToken;
+    _companyName = companyName;
 }
 
   UpcomingTokens.fromJson(dynamic json) {
-    _userId = json['user_id'];
-    _compnyName = json['compny_name'];
-    _mobile = json['mobile'];
-    _role = json['role'];
-    _address = json['address'];
-    _city = json['city'];
-    _category = json['category'];
-    if (json['next_day_tokens'] != null) {
-      _nextDayTokens = [];
-      json['next_day_tokens'].forEach((v) {
-        _nextDayTokens?.add(NextDayTokens.fromJson(v));
-      });
-    }
-  }
-  String? _userId;
-  String? _compnyName;
-  String? _mobile;
-  String? _role;
-  String? _address;
-  String? _city;
-  String? _category;
-  List<NextDayTokens>? _nextDayTokens;
-UpcomingTokens copyWith({  String? userId,
-  String? compnyName,
-  String? mobile,
-  String? role,
-  String? address,
-  String? city,
-  String? category,
-  List<NextDayTokens>? nextDayTokens,
-}) => UpcomingTokens(  userId: userId ?? _userId,
-  compnyName: compnyName ?? _compnyName,
-  mobile: mobile ?? _mobile,
-  role: role ?? _role,
-  address: address ?? _address,
-  city: city ?? _city,
-  category: category ?? _category,
-  nextDayTokens: nextDayTokens ?? _nextDayTokens,
-);
-  String? get userId => _userId;
-  String? get compnyName => _compnyName;
-  String? get mobile => _mobile;
-  String? get role => _role;
-  String? get address => _address;
-  String? get city => _city;
-  String? get category => _category;
-  List<NextDayTokens>? get nextDayTokens => _nextDayTokens;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['user_id'] = _userId;
-    map['compny_name'] = _compnyName;
-    map['mobile'] = _mobile;
-    map['role'] = _role;
-    map['address'] = _address;
-    map['city'] = _city;
-    map['category'] = _category;
-    if (_nextDayTokens != null) {
-      map['next_day_tokens'] = _nextDayTokens?.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
-
-}
-
-/// id : "3"
-/// user_name : "Harish"
-/// counter_id : "56"
-/// category : "1"
-/// time_per_client : "5"
-/// from_time : "10 am"
-/// to_time : "11 am"
-/// total_token : "12"
-/// date : "2023-11-26"
-/// created_at : "2023-11-25 18:11:43"
-/// available_token : 15
-/// current_token : 10
-/// next_token : 11
-
-class NextDayTokens {
-  NextDayTokens({
-      String? id, 
-      String? userName, 
-      String? counterId, 
-      String? category, 
-      String? timePerClient, 
-      String? fromTime, 
-      String? toTime, 
-      String? totalToken, 
-      String? date, 
-      String? createdAt,
-    String? availableToken,
-    String? currentToken,
-    String? nextToken,}){
-    _id = id;
-    _userName = userName;
-    _counterId = counterId;
-    _category = category;
-    _timePerClient = timePerClient;
-    _fromTime = fromTime;
-    _toTime = toTime;
-    _totalToken = totalToken;
-    _date = date;
-    _createdAt = createdAt;
-    _availableToken = availableToken;
-    _currentToken = currentToken;
-    _nextToken = nextToken;
-}
-
-  NextDayTokens.fromJson(dynamic json) {
     _id = json['id'];
     _userName = json['user_name'];
     _counterId = json['counter_id'];
@@ -217,6 +125,7 @@ class NextDayTokens {
     _availableToken = json['available_token'];
     _currentToken = json['current_token'];
     _nextToken = json['next_token'];
+    _companyName = json['company_name'];
   }
   String? _id;
   String? _userName;
@@ -231,7 +140,8 @@ class NextDayTokens {
   String? _availableToken;
   String? _currentToken;
   String? _nextToken;
-NextDayTokens copyWith({  String? id,
+  String? _companyName;
+UpcomingTokens copyWith({  String? id,
   String? userName,
   String? counterId,
   String? category,
@@ -244,7 +154,8 @@ NextDayTokens copyWith({  String? id,
   String? availableToken,
   String? currentToken,
   String? nextToken,
-}) => NextDayTokens(  id: id ?? _id,
+  String? companyName,
+}) => UpcomingTokens(  id: id ?? _id,
   userName: userName ?? _userName,
   counterId: counterId ?? _counterId,
   category: category ?? _category,
@@ -257,6 +168,7 @@ NextDayTokens copyWith({  String? id,
   availableToken: availableToken ?? _availableToken,
   currentToken: currentToken ?? _currentToken,
   nextToken: nextToken ?? _nextToken,
+  companyName: companyName ?? _companyName,
 );
   String? get id => _id;
   String? get userName => _userName;
@@ -271,6 +183,7 @@ NextDayTokens copyWith({  String? id,
   String? get availableToken => _availableToken;
   String? get currentToken => _currentToken;
   String? get nextToken => _nextToken;
+  String? get companyName => _companyName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -287,122 +200,29 @@ NextDayTokens copyWith({  String? id,
     map['available_token'] = _availableToken;
     map['current_token'] = _currentToken;
     map['next_token'] = _nextToken;
+    map['company_name'] = _companyName;
     return map;
   }
 
 }
 
-/// user_id : "56"
-/// compny_name : "Suru"
-/// mobile : "7855881255"
-/// role : "counter"
-/// address : "Vijay Nagar, Indore "
-/// city : "Indore "
-/// category : "1 "
-/// today_tokens : [{"id":"2","user_name":"Surendra","counter_id":"56","category":"1","time_per_client":"5","from_time":"10 am","to_time":"11 am","total_token":"12","date":"2023-11-25","created_at":"2023-11-25 18:11:43","available_token":15,"current_token":10,"next_token":11}]
+/// id : "39"
+/// user_name : "Deva "
+/// counter_id : "114"
+/// category : "1"
+/// time_per_client : "3"
+/// from_time : "12:49"
+/// to_time : "08:49"
+/// total_token : "80"
+/// date : "2023-11-29"
+/// created_at : "2023-11-28 23:49:49"
+/// available_token : "80"
+/// current_token : "10"
+/// next_token : "11"
+/// company_name : "Alphawizz "
 
 class TodaysTokens {
   TodaysTokens({
-      String? userId, 
-      String? compnyName, 
-      String? mobile, 
-      String? role, 
-      String? address, 
-      String? city, 
-      String? category, 
-      List<TodayTokens>? todayTokens,}){
-    _userId = userId;
-    _compnyName = compnyName;
-    _mobile = mobile;
-    _role = role;
-    _address = address;
-    _city = city;
-    _category = category;
-    _todayTokens = todayTokens;
-}
-
-  TodaysTokens.fromJson(dynamic json) {
-    _userId = json['user_id'];
-    _compnyName = json['compny_name'];
-    _mobile = json['mobile'];
-    _role = json['role'];
-    _address = json['address'];
-    _city = json['city'];
-    _category = json['category'];
-    if (json['today_tokens'] != null) {
-      _todayTokens = [];
-      json['today_tokens'].forEach((v) {
-        _todayTokens?.add(TodayTokens.fromJson(v));
-      });
-    }
-  }
-  String? _userId;
-  String? _compnyName;
-  String? _mobile;
-  String? _role;
-  String? _address;
-  String? _city;
-  String? _category;
-  List<TodayTokens>? _todayTokens;
-TodaysTokens copyWith({  String? userId,
-  String? compnyName,
-  String? mobile,
-  String? role,
-  String? address,
-  String? city,
-  String? category,
-  List<TodayTokens>? todayTokens,
-}) => TodaysTokens(  userId: userId ?? _userId,
-  compnyName: compnyName ?? _compnyName,
-  mobile: mobile ?? _mobile,
-  role: role ?? _role,
-  address: address ?? _address,
-  city: city ?? _city,
-  category: category ?? _category,
-  todayTokens: todayTokens ?? _todayTokens,
-);
-  String? get userId => _userId;
-  String? get compnyName => _compnyName;
-  String? get mobile => _mobile;
-  String? get role => _role;
-  String? get address => _address;
-  String? get city => _city;
-  String? get category => _category;
-  List<TodayTokens>? get todayTokens => _todayTokens;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['user_id'] = _userId;
-    map['compny_name'] = _compnyName;
-    map['mobile'] = _mobile;
-    map['role'] = _role;
-    map['address'] = _address;
-    map['city'] = _city;
-    map['category'] = _category;
-    if (_todayTokens != null) {
-      map['today_tokens'] = _todayTokens?.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
-
-}
-
-/// id : "2"
-/// user_name : "Surendra"
-/// counter_id : "56"
-/// category : "1"
-/// time_per_client : "5"
-/// from_time : "10 am"
-/// to_time : "11 am"
-/// total_token : "12"
-/// date : "2023-11-25"
-/// created_at : "2023-11-25 18:11:43"
-/// available_token : 15
-/// current_token : 10
-/// next_token : 11
-
-class TodayTokens {
-  TodayTokens({
       String? id, 
       String? userName, 
       String? counterId, 
@@ -412,10 +232,11 @@ class TodayTokens {
       String? toTime, 
       String? totalToken, 
       String? date, 
-      String? createdAt,
-    String? availableToken,
-    String? currentToken,
-    String? nextToken,}){
+      String? createdAt, 
+      String? availableToken, 
+      String? currentToken, 
+      String? nextToken, 
+      String? companyName,}){
     _id = id;
     _userName = userName;
     _counterId = counterId;
@@ -429,9 +250,10 @@ class TodayTokens {
     _availableToken = availableToken;
     _currentToken = currentToken;
     _nextToken = nextToken;
+    _companyName = companyName;
 }
 
-  TodayTokens.fromJson(dynamic json) {
+  TodaysTokens.fromJson(dynamic json) {
     _id = json['id'];
     _userName = json['user_name'];
     _counterId = json['counter_id'];
@@ -445,6 +267,7 @@ class TodayTokens {
     _availableToken = json['available_token'];
     _currentToken = json['current_token'];
     _nextToken = json['next_token'];
+    _companyName = json['company_name'];
   }
   String? _id;
   String? _userName;
@@ -459,7 +282,8 @@ class TodayTokens {
   String? _availableToken;
   String? _currentToken;
   String? _nextToken;
-TodayTokens copyWith({  String? id,
+  String? _companyName;
+TodaysTokens copyWith({  String? id,
   String? userName,
   String? counterId,
   String? category,
@@ -472,7 +296,8 @@ TodayTokens copyWith({  String? id,
   String? availableToken,
   String? currentToken,
   String? nextToken,
-}) => TodayTokens(  id: id ?? _id,
+  String? companyName,
+}) => TodaysTokens(  id: id ?? _id,
   userName: userName ?? _userName,
   counterId: counterId ?? _counterId,
   category: category ?? _category,
@@ -485,6 +310,7 @@ TodayTokens copyWith({  String? id,
   availableToken: availableToken ?? _availableToken,
   currentToken: currentToken ?? _currentToken,
   nextToken: nextToken ?? _nextToken,
+  companyName: companyName ?? _companyName,
 );
   String? get id => _id;
   String? get userName => _userName;
@@ -499,6 +325,7 @@ TodayTokens copyWith({  String? id,
   String? get availableToken => _availableToken;
   String? get currentToken => _currentToken;
   String? get nextToken => _nextToken;
+  String? get companyName => _companyName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -515,6 +342,7 @@ TodayTokens copyWith({  String? id,
     map['available_token'] = _availableToken;
     map['current_token'] = _currentToken;
     map['next_token'] = _nextToken;
+    map['company_name'] = _companyName;
     return map;
   }
 
