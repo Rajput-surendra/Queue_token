@@ -47,7 +47,7 @@ class _CounterScreenState extends State<CounterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet:   AppButton1(
-        title: "Add Booking",
+        title: isLodder ? "Please wait....": "Add Booking",
         onTap: (){
           if(_formKey.currentState! .validate())
           addBookingApi();
@@ -163,8 +163,8 @@ class _CounterScreenState extends State<CounterScreen> {
                         validator: (val) {
                           if (val!.isEmpty) {
                             return "Please enter name";
-                          } else if (val.length < 5) {
-                            return "Please enter must 5 digit";
+                          } else if (val.length < 4) {
+                            return "Please enter must 4 digit";
                           }
                         },
                       ),
@@ -208,7 +208,11 @@ class _CounterScreenState extends State<CounterScreen> {
         )
     ) ;
   }
+  bool isLodder =  false;
 addBookingApi() async {
+  setState(() {
+    isLodder =  true;
+  });
   var headers = {
     'Cookie': 'ci_session=8f48c8eae5ab612664fc312e9f4d8b6786d866ff'
   };
@@ -220,18 +224,23 @@ addBookingApi() async {
     'name':nameController.text,
     'mobile':mobileController.text
   });
-  print("1111111111111111111111${request.fields}");
   request.headers.addAll(headers);
-
   http.StreamedResponse response = await request.send();
-
   if (response.statusCode == 200) {
     var result = await response.stream.bytesToString();
     var finalResult =  jsonDecode(result);
     Fluttertoast.showToast(msg: 'Token generate successfully');
     Navigator.pop(context);
+    setState(() {
+      setState(() {
+        isLodder =  false;
+      });
+    });
   }
   else {
+    setState(() {
+      isLodder =  false;
+    });
     print(response.reasonPhrase);
   }
 

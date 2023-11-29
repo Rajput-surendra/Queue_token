@@ -211,17 +211,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 110,
                                 child:getCounterModel?.todaysTokens!.isEmpty ?? false ? Center(child: Text("No Today Token")): ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount:getCounterModel?.todaysTokens?[0].todayTokens?.length ?? 0,
+                                    itemCount:getCounterModel?.todaysTokens?.length ?? 0,
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                         onTap: (){
                                           Navigator.push(context, MaterialPageRoute(builder: (context)=>CounterScreen(cId:
-                                          getCounterModel!.todaysTokens![0].todayTokens![index].counterId,
-                                            tokenId: getCounterModel!.todaysTokens![0].todayTokens![index].id,
-                                            date:getCounterModel!.todaysTokens![0].todayTokens![index].date ,
-                                            fTime: getCounterModel!.todaysTokens![0].todayTokens![index].fromTime,
-                                            toTime: getCounterModel!.todaysTokens![0].todayTokens![index].toTime,
-                                            tTotal: getCounterModel!.todaysTokens![0].todayTokens![index].totalToken,)));
+                                          getCounterModel!.todaysTokens![index].counterId,
+                                            tokenId: getCounterModel!.todaysTokens![index].id,
+                                            date:getCounterModel!.todaysTokens![index].date ,
+                                            fTime: getCounterModel!.todaysTokens![index].fromTime,
+                                            toTime: getCounterModel!.todaysTokens![index].toTime,
+                                            tTotal: getCounterModel!.todaysTokens![index].totalToken,)));
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
@@ -244,8 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             const SizedBox(width: 2,),
                                                             Row(
                                                               children: [
-                                                                Text("${getCounterModel!.todaysTokens![0].todayTokens![index].fromTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                                Text(" to ${getCounterModel!.todaysTokens![0].todayTokens![index].toTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                                Text("${getCounterModel!.todaysTokens![index].fromTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                                Text(" to ${getCounterModel!.todaysTokens![index].toTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
                                                               ],
                                                             )
                                                           ],
@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                                             const Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                                             const SizedBox(width: 2,),
-                                                            Text("${getCounterModel!.todaysTokens![0].todayTokens![index].date!}",style: const TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                            Text("${getCounterModel!.todaysTokens![index].date!}",style: const TextStyle(color: AppColors.whit,fontSize: 12),)
                                                           ],
                                                         ),
                                                       )
@@ -280,17 +280,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 children: [
                                                                   Row(
                                                                     children: [
-                                                                      const Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      const Text("",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                       const SizedBox(width: 2,),
-                                                                      Text("${getCounterModel!.todaysTokens![0].compnyName}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                      Text("${getCounterModel!.todaysTokens![index].companyName}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                     ],
                                                                   ),
                                                                   Row(
                                                                     children: [
                                                                       const SizedBox(height: 10,),
-                                                                      const Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
+                                                                      const Text("",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                       const SizedBox(width: 2,),
-                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].userName!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                      Text("${getCounterModel!.todaysTokens![index].userName!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                     ],
                                                                   ),
                                                                   Row(
@@ -298,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       const SizedBox(height: 10,),
                                                                       const Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                       const SizedBox(width: 2,),
-                                                                      Text("${getCounterModel!.todaysTokens![0].todayTokens![index].availableToken!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                      Text("${getCounterModel!.todaysTokens![index].availableToken!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                     ],
                                                                   )
                                                                 ],
@@ -315,14 +315,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   children: [
                                                                     const Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     const SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.todaysTokens![0].todayTokens![index].totalToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                    Text("${getCounterModel!.todaysTokens![index].totalToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                   ],
                                                                 ),
                                                                 Row(
                                                                   children: [
                                                                     const Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     const SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.todaysTokens![0].todayTokens![index].currentToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                    Text("${getCounterModel!.todaysTokens![index].currentToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                   ],
                                                                 ),
                                                                 const SizedBox(height: 2,),
@@ -330,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   children: [
                                                                     const Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     const SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.todaysTokens![0].todayTokens![index].nextToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                    Text("${getCounterModel!.todaysTokens![index].nextToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                   ],
                                                                 ),
 
@@ -377,14 +377,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Container(
                               child: getCounterModel?.upcomingTokens?.isEmpty ?? false ? Center(child: const Text("No UpcomingTokens")):ListView.builder(
-                                  itemCount:getCounterModel?.upcomingTokens?[0].nextDayTokens?.length  ?? 0,
+                                  itemCount:getCounterModel?.upcomingTokens?.length  ?? 0,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: (){
-                                        //Get.toNamed(winnerScreen,arguments:lotteryModel?.data?.lotteries?[index].gameId );
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CounterScreen(cId:
+                                        getCounterModel!.upcomingTokens![index].counterId,
+                                          tokenId: getCounterModel!.upcomingTokens![index].id,
+                                          date:getCounterModel!.upcomingTokens![index].date ,
+                                          fTime: getCounterModel!.upcomingTokens![index].fromTime,
+                                          toTime: getCounterModel!.upcomingTokens![index].toTime,
+                                          tTotal: getCounterModel!.upcomingTokens![index].totalToken,)));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -407,8 +413,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const SizedBox(width: 2,),
                                                           Row(
                                                             children: [
-                                                              Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].fromTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
-                                                              Text(" to ${getCounterModel!.upcomingTokens![0].nextDayTokens![index].toTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                              Text("${getCounterModel!.upcomingTokens![index].fromTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
+                                                              Text(" to ${getCounterModel!.upcomingTokens![index].toTime}",style: const TextStyle(color: AppColors.whit,fontSize: 12),),
                                                             ],
                                                           )
                                                         ],
@@ -421,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                                           const Text("Date:",style: TextStyle(color: AppColors.whit,fontSize: 12),),
                                                           const SizedBox(width: 2,),
-                                                          Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].date!}",style: const TextStyle(color: AppColors.whit,fontSize: 12),)
+                                                          Text("${getCounterModel!.upcomingTokens![index].date!}",style: const TextStyle(color: AppColors.whit,fontSize: 12),)
                                                         ],
                                                       ),
                                                     )
@@ -445,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   children: [
                                                                     const Text("Company Name:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     const SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.upcomingTokens![0].compnyName}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                    Text("${getCounterModel!.upcomingTokens![index].companyName}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -453,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     const SizedBox(height: 10,),
                                                                     const Text("Name :",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     const SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].userName!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                    Text("${getCounterModel!.upcomingTokens![index].userName!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -461,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     const SizedBox(height: 10,),
                                                                     const Text("Available Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                     const SizedBox(width: 2,),
-                                                                    Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].availableToken!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
+                                                                    Text("${getCounterModel!.upcomingTokens![index].availableToken!}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),)
                                                                   ],
                                                                 )
                                                               ],
@@ -478,14 +484,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 children: [
                                                                   const Text("All Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                   const SizedBox(width: 2,),
-                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].totalToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  Text("${getCounterModel!.upcomingTokens![index].totalToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                 ],
                                                               ),
                                                               Row(
                                                                 children: [
                                                                   const Text("Current Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                   const SizedBox(width: 2,),
-                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].currentToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  Text("${getCounterModel!.upcomingTokens![index].currentToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                 ],
                                                               ),
                                                               const SizedBox(height: 2,),
@@ -493,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 children: [
                                                                   const Text("Next Token:",style: TextStyle(color: AppColors.fntClr,fontSize: 12),),
                                                                   const SizedBox(width: 2,),
-                                                                  Text("${getCounterModel!.upcomingTokens![0].nextDayTokens![index].nextToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                                  Text("${getCounterModel!.upcomingTokens![index].nextToken}",style: const TextStyle(color: AppColors.fntClr,fontSize: 12,fontWeight: FontWeight.bold),),
                                                                 ],
                                                               ),
 

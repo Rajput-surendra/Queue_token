@@ -61,8 +61,10 @@ class SplashScreen extends StatelessWidget {
            Get.offAllNamed(search);
          }else{
            if(role == "user"){
+             print('__________sssssssssssssssss_________');
              Get.offAllNamed(bottomBar);
            }else{
+             print('__________pppppppppppppp_________');
              Get.offAllNamed(bottomBar1);
            }
 

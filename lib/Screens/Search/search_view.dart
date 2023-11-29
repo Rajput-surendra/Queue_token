@@ -48,6 +48,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     });
   }
+  bool isLodding = false;
   final nameController = TextEditingController();
   final cityController = TextEditingController();
   final counterIdController = TextEditingController();
@@ -56,16 +57,16 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
         backgroundColor: AppColors.whit,
         appBar: AppBar(
-          leading: InkWell(
-            onTap: (){
-              if(userRole == 'user'){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
-              }else{
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardCounterScreen()));
-              }
-
-            },
-              child: Icon(Icons.arrow_back)),
+          // leading: InkWell(
+          //   onTap: (){
+          //     if(userRole == 'user'){
+          //       Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
+          //     }else{
+          //       Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardCounterScreen()));
+          //     }
+          //
+          //   },
+          //     child: const Icon(Icons.arrow_back)),
           automaticallyImplyLeading: false,
 
           shape: const RoundedRectangleBorder(
@@ -74,7 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),),
           toolbarHeight: 60,
           centerTitle: true,
-          title: Text("Search Token",style: TextStyle(fontSize: 17),),
+          title: const Text("Search Token",style: TextStyle(fontSize: 17),),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               borderRadius:   BorderRadius.only(
@@ -88,11 +89,11 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         body:  SingleChildScrollView(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 10),
+            padding:  const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 Container(
                   width: double.maxFinite,
                   height: 50,
@@ -115,7 +116,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 Container(
                   width: double.maxFinite,
                   height: 50,
@@ -138,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 Container(
                   width: double.maxFinite,
                   height: 50,
@@ -158,7 +159,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   ),
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 Container(
                   width: double.infinity,
                   child: Card(
@@ -172,7 +173,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 color: AppColors.fntClr,fontWeight: FontWeight.w500,fontSize:15
                             ),),
                           value: animalCat,
-                          icon:  Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.secondary,size: 30,),
+                          icon:  const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.secondary,size: 30,),
                           style:  const TextStyle(color: AppColors.secondary,fontWeight: FontWeight.bold),
                           underline: Padding(
                             padding: const EdgeInsets.only(left: 0,right: 0),
@@ -214,13 +215,18 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 50,),
+                const SizedBox(height: 50,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: AppButton(
-                    title: 'Get Token',
+                    title:isLodding ? 'Please wait...': 'Get Token',
                     onTap: () {
-                      getFilterApi();
+                      if(cityController.text.isEmpty && nameController.text.isEmpty && counterIdController.text.isEmpty && catId == null ){
+                        Fluttertoast.showToast(msg: "Please ablest one select",backgroundColor:AppColors.primary);
+                      }else{
+                        getFilterApi();
+                      }
+
                     },
                   ),
                 ),
@@ -230,16 +236,20 @@ class _SearchScreenState extends State<SearchScreen> {
         )
     ) ;
   }
+
   getFilterApi() async {
+    setState(() {
+      isLodding = true;
+    });
   var headers = {
     'Cookie': 'ci_session=052f7198d39c07d7c57fb2fed6a242b3b8aaa2de'
   };
   var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/Apicontroller/counters'));
   request.fields.addAll({
-    nameController.text.isEmpty ? "" :  'counter_name':nameController.text,
-    cityController.text.isEmpty? "": 'counter_city':cityController.text,
-    catId == null ? "" : 'counter_category':  catId.toString(),
-    counterIdController.text.isEmpty ? "" :   'counter_id':counterIdController.text
+    nameController.text.isEmpty ? "":'counter_name':nameController.text,
+    cityController.text.isEmpty? "":'counter_city':cityController.text,
+    catId == null ? "" : 'counter_category':catId.toString(),
+    counterIdController.text.isEmpty ? "":'counter_id':counterIdController.text
   });
 
   request.headers.addAll(headers);
@@ -253,17 +263,19 @@ class _SearchScreenState extends State<SearchScreen> {
         catNewId = catId;
         cId = counterIdController.text;
         cityName = cityController.text;
-
+        isLodding =  false;
       });
+
      if(userRole == 'user'){
        Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardScreen()));
      }else{
        Navigator.push(context,MaterialPageRoute(builder: (context)=>DashBoardCounterScreen()));
      }
-
-
   }
   else {
+    setState(() {
+      isLodding = false;
+    });
   print(response.reasonPhrase);
   }
 

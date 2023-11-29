@@ -17,13 +17,14 @@ class OTPVerifyController extends AppBaseController{
     // TODO: implement onInit
     super.onInit();
       data = Get.arguments ;
-    otp=data[1].toString();
+      otp =data[1].toString();
+      print('______otp____${otp}_________');
 
   }
 
 RxBool isLoading = false.obs ;
   List data = [] ;
-  String otp = '' ;
+  var otp;
 
   String? role;
   Future<void> verifyOTP() async {
@@ -47,7 +48,14 @@ RxBool isLoading = false.obs ;
         if(role == "user"){
           Get.offAllNamed(search);
         }else{
-          Get.offAllNamed(bottomBar);
+          if(role == 'user'){
+            print('__________${role}_________');
+            Get.offAllNamed(bottomBar);
+          }else{
+            print('__________${role}_________');
+            Get.offAllNamed(bottomBar1);
+          }
+
         }
       } else {
         Fluttertoast.showToast(msg: msg);
@@ -66,6 +74,7 @@ RxBool isLoading = false.obs ;
       bool status = getData['status'];
       String msg = getData['msg'];
        otp = getData['otp'].toString();
+
        update();
       if (status) {
         Fluttertoast.showToast(msg: msg);
